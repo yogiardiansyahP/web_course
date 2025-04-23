@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Codein Course</title>
-  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
 <body>
   <div class="container">
     <div class="login-left">
       <h2>Masuk</h2>
       <p>Selamat datang di platform Codein Course</p>
-      <form action="#">
+      <form action="{{ route('dashboard') }}" method="GET">
         <input type="email" placeholder="Email" required>
         <input type="password" placeholder="Password" required>
         <div class="forgot-password">

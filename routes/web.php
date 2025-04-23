@@ -20,3 +20,7 @@ Route::get('/kelas', function () {
 Route::get('/kembali', function () {
     return view('welcome');
 })->name('kembali');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
