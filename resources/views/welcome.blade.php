@@ -16,14 +16,23 @@
       <ul class="nav-links">
         <li><a href="#" class="active">Beranda</a></li>
         <li><a href="#">Tentang Kami</a></li>
-    
-       
         <li><a href="#">Kontak</a></li>
       </ul>
       <div class="auth-buttons">
-        <a href="{{ route('register')}}" class="btn-outline">Daftar</a>
-        <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
-
+        @if(Auth::check())
+          <!-- Menampilkan tombol Logout jika sudah login -->
+          <a href="{{ route('logout') }}" class="btn-filled" 
+             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+        @else
+          <!-- Menampilkan tombol Daftar dan Masuk jika belum login -->
+          <a href="{{ route('register') }}" class="btn-outline">Daftar</a>
+          <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
+        @endif
       </div>
     </nav>
   </header>
@@ -43,7 +52,6 @@
         <span>500+ orang telah ikut serta</span>
       </div>
       <a href="{{ route('kelas') }}" class="btn-main">Belajar Sekarang</a>
-
     </div>
     <div class="hero-image">
       <img src="{{ asset('asset/home.png') }}" alt="Hero Image" />
