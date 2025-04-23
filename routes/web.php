@@ -13,3 +13,10 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+Route::get('/kelas', function () {
+    return view('kelas');
+})->name('kelas');
+
+Route::get('/kembali', function () {
+    return view('welcome');
+})->name('kembali');

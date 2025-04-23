@@ -42,7 +42,8 @@
         <img src="https://i.pinimg.com/736x/fd/51/88/fd5188098f19524c7b772c34fd19caa7.jpg" alt="stars" />
         <span>500+ orang telah ikut serta</span>
       </div>
-      <a href="#" class="btn-main">Belajar Sekarang</a>
+      <a href="{{ route('kelas') }}" class="btn-main">Belajar Sekarang</a>
+
     </div>
     <div class="hero-image">
       <img src="{{ asset('asset/home.png') }}" alt="Hero Image" />
