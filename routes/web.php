@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProgressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,4 @@ Route::get('/kembali', function () {
     return view('welcome');
 })->name('kembali');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [ProgressController::class, 'dashboard'])->middleware('auth')->name('dashboard');

@@ -11,7 +11,6 @@
     <div class="login-left">
       <h2>Masuk</h2>
       <p>Selamat datang di platform Codein Course</p>
-<<<<<<< HEAD
 
       @if($errors->any())
         <div style="color: red; margin-bottom: 10px;">
@@ -23,11 +22,7 @@
         @csrf
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
-=======
       <form action="{{ route('dashboard') }}" method="GET">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
->>>>>>> 6066cb6c5c3fff0ca51ba5d0b03b5195e9c14a27
         <div class="forgot-password">
           <a href="#">Lupa kata sandi?</a>
         </div>

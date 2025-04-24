@@ -14,7 +14,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect('/kelas');
+            return redirect('/dashboard');
         }
 
         return back()->withErrors([
@@ -37,7 +37,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/kelas');
+        return redirect('/login');
     }
 
     public function logout()
