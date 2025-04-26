@@ -24,3 +24,15 @@ Route::get('/kembali', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('/tentang', function () {
+    return view('kontak');
+})->name('tentang');
+
+Route::get('/kontak', function () {
+    return view('tentang_kami');
+})->name('kontak');
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');
+

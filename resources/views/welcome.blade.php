@@ -14,11 +14,11 @@
         <img src="{{ asset('asset/logo.png') }}" alt="Codein Course" />
       </div>
       <ul class="nav-links">
-        <li><a href="#" class="active">Beranda</a></li>
-        <li><a href="#">Tentang Kami</a></li>
+        <li><a href="{{ route('home') }}" class="active">Beranda</a></li>
+        <li><a href="{{ route('kontak') }}">Tentang Kami</a></li>
     
        
-        <li><a href="#">Kontak</a></li>
+        <li><a href="{{ route('tentang') }}">Kontak</a></li>
       </ul>
       <div class="auth-buttons">
         <a href="{{ route('register')}}" class="btn-outline">Daftar</a>
