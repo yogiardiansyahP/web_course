@@ -83,15 +83,11 @@
         </div>
       </div>
     </a>
-    
-    
-    
-
   </div>
 </main>
 
 <script>
-    window.progressData = @json($progressData);
+    window.progressData = @json($progressDataFilled ?? []);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
