@@ -14,21 +14,13 @@
         <img src="{{ asset('asset/logo.png') }}" alt="Codein Course" />
       </div>
       <ul class="nav-links">
-<<<<<<< HEAD
         <li><a href="{{ route('home') }}" class="active">Beranda</a></li>
-        <li><a href="{{ route('kontak') }}">Tentang Kami</a></li>
-    
-       
-        <li><a href="{{ route('tentang') }}">Kontak</a></li>
-=======
-        <li><a href="#" class="active">Beranda</a></li>
-        <li><a href="#">Tentang Kami</a></li>
-        <li><a href="#">Kontak</a></li>
->>>>>>> 7072e3ef1abce65959df349d1206467f0fcc9716
+        <li><a href="{{ route('tentang') }}">Tentang Kami</a></li>
+        <li><a href="{{ route('kontak') }}">Kontak</a></li>
       </ul>
       <div class="auth-buttons">
         @if(Auth::check())
-          <!-- Menampilkan tombol Logout jika sudah login -->
+          <!-- Jika user sudah login -->
           <a href="{{ route('logout') }}" class="btn-filled" 
              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             Logout
@@ -37,7 +29,7 @@
             @csrf
           </form>
         @else
-          <!-- Menampilkan tombol Daftar dan Masuk jika belum login -->
+          <!-- Jika user belum login -->
           <a href="{{ route('register') }}" class="btn-outline">Daftar</a>
           <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
         @endif

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProgressController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,9 +31,21 @@ Route::get('/kembali', function () {
     return view('welcome');
 })->name('kembali');
 
-<<<<<<< HEAD
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $progressData = [
+        'completed' => 0,
+        'in_progress' => 0,
+        'not_started' => 0,
+    ];
+    
+    if (Auth::check()) {
+        $progressData = [
+            'completed' => 2,
+            'in_progress' => 1,
+            'not_started' => 3,
+        ];
+    }
+    return view('dashboard', compact('progressData'));
 })->name('dashboard');
 
 Route::get('/tentang', function () {
@@ -48,8 +62,7 @@ Route::get('/checkout', function () {
     return view('checkout');
 })->name('checkout');
 
-
-
-=======
-Route::get('/dashboard', [ProgressController::class, 'dashboard'])->middleware('auth')->name('dashboard');
->>>>>>> 7072e3ef1abce65959df349d1206467f0fcc9716
+Route::middleware('auth')->group(function () {
+    Route::view('/checkout', 'checkout')->name('checkout');
+    Route::get('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
+});
