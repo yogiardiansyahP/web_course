@@ -11,14 +11,25 @@
     <div class="login-left">
       <h2>Masuk</h2>
       <p>Selamat datang di platform Codein Course</p>
+
+      @if($errors->any())
+        <div style="color: red; margin-bottom: 10px;">
+          {{ $errors->first() }}
+        </div>
+      @endif
+
+      <form method="POST" action="{{ route('login.post') }}">
+        @csrf
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
       <form action="{{ route('dashboard') }}" method="GET">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Password" required>
         <div class="forgot-password">
           <a href="#">Lupa kata sandi?</a>
         </div>
         <button type="submit">Masuk</button>
-        <p class="register-text">Kamu belum memiliki akun? <a href="#">Registrasi</a></p>
+        <p class="register-text">
+          Kamu belum memiliki akun? <a href="{{ route('register') }}">Registrasi</a>
+        </p>
       </form>
     </div>
     <div class="login-right">
