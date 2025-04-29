@@ -9,22 +9,25 @@ use App\Models\User;
 
 class SettingController extends Controller
 {
-    /**
-     * Show the settings page.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        return view('pengaturan');
+        $user = Auth::user();
+        return view('pengaturan', compact('user'));
     }
 
-    /**
-     * Update the user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->save();
+
+        return back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -40,7 +43,6 @@ class SettingController extends Controller
             ]);
         }
 
-        // Menggunakan metode forceFill untuk memperbarui kata sandi
         $user->forceFill([
             'password' => Hash::make($request->new_password),
         ])->save();

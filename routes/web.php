@@ -16,13 +16,12 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
 Route::get('/register', function () {
     return view('register');
 })->name('register');
 
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/kelas', function () {
@@ -49,7 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
 
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
-    Route::post('/pengaturan/update-password', [SettingController::class, 'updatePassword'])->name('pengaturan.update-password');
+    Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
+    Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');
 });
 
 Route::get('/tentang', function () {
