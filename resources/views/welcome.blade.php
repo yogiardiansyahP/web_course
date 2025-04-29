@@ -14,17 +14,13 @@
         <img src="{{ asset('asset/logo.png') }}" alt="Codein Course" />
       </div>
       <ul class="nav-links">
-<<<<<<< HEAD
+
         <li><a href="{{ route('home') }}" class="active">Beranda</a></li>
         <li><a href="{{ route('kontak') }}">Tentang Kami</a></li>
     
        
         <li><a href="{{ route('tentang') }}">Kontak</a></li>
-=======
-        <li><a href="#" class="active">Beranda</a></li>
-        <li><a href="#">Tentang Kami</a></li>
-        <li><a href="#">Kontak</a></li>
->>>>>>> 7072e3ef1abce65959df349d1206467f0fcc9716
+
       </ul>
       <div class="auth-buttons">
         @if(Auth::check())

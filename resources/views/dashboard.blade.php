@@ -28,8 +28,8 @@
 
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Codein Course" class="logo">
-  <a href="#" class="active">Dashboard</a>
-  <a href="#">Course</a>
+  <a href="{{ route('home') }}" class="active">Dashboard</a>
+  <a href="{{ route('logout') }}">Course</a>
   <a href="#">Sertifikat</a>
   <a href="#">Transaksi</a>
   <a href="#">Pengaturan</a>
