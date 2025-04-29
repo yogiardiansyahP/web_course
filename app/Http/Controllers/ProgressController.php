@@ -8,14 +8,25 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgressController extends Controller
 {
-    public function dashboard()
+    public function index()
     {
-        $user = Auth::user();
-        $progressData = ProgressBelajar::where('user_id', $user->id)
-            ->orderBy('created_at')
-            ->pluck('persentase');
-
-        return view('dashboard', compact('progressData'));
+        $userId = Auth::id();
+        $progressData = ProgressBelajar::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get(['persentase'])
+            ->pluck('persentase')
+            ->toArray();
+        
+        // Memastikan data progress diisi untuk semua bulan jika ada data yang kurang
+        $progressDataFilled = array_fill(0, 11, 0);
+        foreach ($progressData as $value) {
+            $progressDataFilled[] = $value;
+        }
+        
+        // Memastikan array progress tidak lebih dari 11 bulan
+        $progressDataFilled = array_slice($progressDataFilled, -11);
+        
+        return view('dashboard', compact('progressDataFilled'));
     }
 
     public function update(Request $request)

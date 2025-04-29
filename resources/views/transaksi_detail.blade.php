@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transaksi - Dashboard</title>
-  <link rel="stylesheet" href="transaksi.css">
+  {{-- <link rel="stylesheet" href="transaksi.css"> --}}
   <style>
     /* Ambil semua base style dari sertifikat.css, tambah ini: */
 

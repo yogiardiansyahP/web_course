@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function progressBelajar()
+    {
+        return $this->hasOne(\App\Models\ProgressBelajar::class);
+    }    
 }

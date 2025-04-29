@@ -4,103 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pengaturan - Dashboard</title>
-  <link rel="stylesheet" href="pengaturan.css">
-  <style>
-    /* Gunakan base style seperti sebelumnya, tambah berikut: */
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  background: #f3f4f6;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-}
-
-.tab.active {
-  background: #ffffff;
-  border: 2px solid #059669;
-  color: #059669;
-}
-
-/* Settings Card */
-.settings-card {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-/* Avatar */
-.avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.profile-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 9999px;
-}
-
-.edit-avatar {
-  background: #059669;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-/* Form */
-.profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #f9fafb;
-}
-
-/* Save Button */
-.save-button {
-  background: #059669;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  width: fit-content;
-}
-
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/pengaturan.css') }}">
 </head>
 <body>
 
@@ -159,4 +63,13 @@
           </div>
           <div class="form-group">
             <label>Full Name</label>
-            <input type="text" value="yogi ardiansyah prat
+            <input type="text" value="yogi ardiansyah pratama">
+          </div>
+          <button class="save-button">Simpan Perubahan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

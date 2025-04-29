@@ -29,10 +29,10 @@
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Codein Course" class="logo">
   <a href="#" class="active">Dashboard</a>
-  <a href="#">Course</a>
-  <a href="#">Sertifikat</a>
-  <a href="#">Transaksi</a>
-  <a href="#">Pengaturan</a>
+<a href="{{ route('kelas') }}">Course</a>
+<a href="{{ route('sertifikat') }}">Sertifikat</a>
+<a href="{{ route('transaksi') }}">Transaksi</a>
+<a href="{{ route('pengaturan') }}">Pengaturan</a>
   <hr style="margin: 20px 0;">
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     @csrf
