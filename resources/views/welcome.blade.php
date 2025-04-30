@@ -24,7 +24,7 @@
       </ul>
       <div class="auth-buttons">
         @if(Auth::check())
-          <!-- Menampilkan tombol Logout jika sudah login -->
+          <!-- Jika user sudah login -->
           <a href="{{ route('logout') }}" class="btn-filled" 
              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             Logout
@@ -33,7 +33,7 @@
             @csrf
           </form>
         @else
-          <!-- Menampilkan tombol Daftar dan Masuk jika belum login -->
+          <!-- Jika user belum login -->
           <a href="{{ route('register') }}" class="btn-outline">Daftar</a>
           <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
         @endif

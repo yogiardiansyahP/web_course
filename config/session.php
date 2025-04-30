@@ -156,7 +156,11 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    'domain' => env('SESSION_DOMAIN', null),
+
+    'secure' => env('SESSION_SECURE_COOKIE', false),
+
+    'same_site' => env('SESSION_SAMESITE', 'lax'),
 
     /*
     |--------------------------------------------------------------------------
