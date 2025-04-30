@@ -7,6 +7,7 @@ use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,22 +35,18 @@ Route::get('/kembali', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
-
     Route::get('/checkout', function () {
         return view('checkout');
     })->name('checkout');
-
     Route::get('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
-
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
     Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
-
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
-
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
     Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
     Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 });
 
 Route::get('/tentang', function () {

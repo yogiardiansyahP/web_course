@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProgressBelajarSeeder::class,
         ]);
+        $this->call(CourseSeeder::class);
     }
 }
