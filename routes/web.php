@@ -56,3 +56,9 @@ Route::get('/tentang', function () {
 Route::get('/kontak', function () {
     return view('tentang_kami');
 })->name('kontak');
+
+Route::get('/datauser', [AdminController::class, 'showUser'])->name('datauser');
+
+Route::get('/datatransaksi', [AdminController::class, 'showTransaksi'])->name('datatransaksi');
+
+Route::get('/datacourse', [AdminController::class, 'showCourse'])->name('datacourse');

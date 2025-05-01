@@ -25,4 +25,23 @@ class AdminController extends Controller
             'courses'
         ));
     }
+
+    public function showUser()
+{
+    $users = User::all(); // Atau sesuai kebutuhan
+    return view('datauser', compact('users'));
+}
+
+public function showTransaksi()
+{
+    $users = User::all(); // Atau sesuai kebutuhan
+    return view('datatransaksi', compact('users'));
+}
+
+public function showCourse()
+{
+    $users = User::all(); // Atau sesuai kebutuhan
+    return view('datatransaksi', compact('users'));
+}
+
 }

@@ -19,14 +19,15 @@
                 <i class="fas fa-tachometer-alt"></i>
                 Dashboard
             </a>
-            <a href="#">
-                <i class="fas fa-book"></i>
+            <a href="{{ url('/datacourse') }}">
+                <i class="fas fa-users"></i>
                 Course
             </a>
-            <a href="#">
+            <a href="{{ url('/datauser') }}">
                 <i class="fas fa-users"></i>
                 User
             </a>
+            
             <a href="#">
                 <i class="fas fa-cogs"></i>
                 Setting
