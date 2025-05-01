@@ -8,6 +8,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CourseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,6 +48,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
     Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/datauser', [AdminController::class, 'showUser'])->name('datauser');
+    Route::get('/datatransaksi', [AdminController::class, 'showTransaksi'])->name('datatransaksi');
+    Route::get('/datacourse', [AdminController::class, 'showCourse'])->name('datacourse');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
 });
 
 Route::get('/tentang', function () {
@@ -56,9 +65,3 @@ Route::get('/tentang', function () {
 Route::get('/kontak', function () {
     return view('tentang_kami');
 })->name('kontak');
-
-Route::get('/datauser', [AdminController::class, 'showUser'])->name('datauser');
-
-Route::get('/datatransaksi', [AdminController::class, 'showTransaksi'])->name('datatransaksi');
-
-Route::get('/datacourse', [AdminController::class, 'showCourse'])->name('datacourse');

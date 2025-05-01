@@ -27,21 +27,20 @@ class AdminController extends Controller
     }
 
     public function showUser()
-{
-    $users = User::all(); // Atau sesuai kebutuhan
-    return view('datauser', compact('users'));
-}
+    {
+        $users = User::all();
+        return view('datauser', compact('users'));
+    }
 
-public function showTransaksi()
-{
-    $users = User::all(); // Atau sesuai kebutuhan
-    return view('datatransaksi', compact('users'));
-}
+    public function showTransaksi()
+    {
+        $users = User::all();
+        return view('datatransaksi', compact('users'));
+    }
 
-public function showCourse()
-{
-    $users = User::all(); // Atau sesuai kebutuhan
-    return view('datatransaksi', compact('users'));
-}
-
+    public function showCourse()
+    {
+        $courses = Course::with('materials')->get();
+        return view('datacourse', compact('courses'));
+    }
 }

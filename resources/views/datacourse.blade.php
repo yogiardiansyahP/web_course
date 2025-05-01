@@ -1,49 +1,50 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="course-container">
     <h2>Manajemen Course</h2>
 
     <!-- Form Tambah Course -->
     <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div>
-            <label>Nama</label>
-            <input type="text" name="name" required>
+        <div class="form-group">
+            <label for="name">Nama</label>
+            <input type="text" name="name" class="form-control" required>
         </div>
-        <div>
-            <label>Thumbnail</label>
-            <input type="file" name="thumbnail" accept="image/*" required>
+        <div class="form-group">
+            <label for="thumbnail">Thumbnail</label>
+            <input type="file" name="thumbnail" class="form-control-file" accept="image/*" required>
         </div>
-        <div>
-            <label>Deskripsi</label>
-            <textarea name="description" required></textarea>
-        </div>
-        <div>
-            <label>Materi</label>
-            <textarea name="description" required></textarea>
-        </div>
-        <div>
-            <label>Aksi</label>
-            <textarea name="description" required></textarea>
+        <div class="form-group">
+            <label for="description">Deskripsi</label>
+            <textarea name="description" class="form-control" rows="3" required></textarea>
         </div>
 
         <div id="materiContainer">
-            <label>Materi Pembelajaran</label>
+            <label for="materials">Materi Pembelajaran</label>
             <div class="materi-item">
-                <input type="text" name="materials[]" placeholder="Materi 1" required>
+                <input type="text" name="materials[]" class="form-control" placeholder="Materi 1" required>
             </div>
         </div>
-        <button type="button" onclick="addMateri()">+ Tambah Materi</button>
+        <button type="button" class="btn btn-primary" onclick="addMateri()">+ Tambah Materi</button>
 
-        <button type="submit">Simpan</button>
+        <button type="submit" class="btn btn-success">Simpan</button>
     </form>
 
     <hr>
 
     <!-- Tabel Course -->
-    <table border="1" cellpadding="8">
-        
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nama</th>
+                <th>Thumbnail</th>
+                <th>Deskripsi</th>
+                <th>Materi</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
         <tbody>
             @foreach ($courses as $course)
                 <tr>
@@ -57,11 +58,12 @@
                             @endforeach
                         </ul>
                     </td>
+                    <td>{{ $course->status }}</td>
                     <td>
-                        <a href="{{ route('courses.edit', $course->id) }}">Edit</a> |
+                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">Edit</a> |
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')
-                            <button type="submit" onclick="return confirm('Hapus course ini?')">Hapus</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus course ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
@@ -76,7 +78,7 @@
         const index = container.querySelectorAll('.materi-item').length + 1;
         const input = document.createElement('div');
         input.classList.add('materi-item');
-        input.innerHTML = `<input type="text" name="materials[]" placeholder="Materi ${index}" required>`;
+        input.innerHTML = `<input type="text" name="materials[]" class="form-control" placeholder="Materi ${index}" required>`;
         container.appendChild(input);
     }
 </script>

@@ -14,7 +14,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect('/dashboard'); // Arahkan ke halaman dashboard setelah login sukses
+            return redirect('/dashboard');
         }
 
         return back()->withErrors([
@@ -24,24 +24,17 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Validasi data input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
-
-        // Buat user baru
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
-        // Login otomatis setelah register
         Auth::login($user);
-
-        // Redirect ke dashboard atau halaman lain
         return redirect('/dashboard');
     }
 
