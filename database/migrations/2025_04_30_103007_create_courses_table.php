@@ -11,11 +11,14 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('thumbnail');
+            $table->text('description');
             $table->string('mentor');
-            $table->integer('students_count')->default(0);
-            $table->enum('status', ['published', 'draft'])->default('draft');
+
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
+        
     }
     public function down()
     {

@@ -11,6 +11,8 @@ class Material extends Model
 
     protected $table = 'materials';
 
+    
+
     protected $fillable = [
         'course_id',
         'title',

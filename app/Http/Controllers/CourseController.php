@@ -20,35 +20,34 @@ class CourseController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'mentor' => 'required|string|max:255',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'description' => 'required|string',
-            'materials' => 'required|array',
-            'materials.*' => 'required|string'
+{
+    $validated = $request->validate([
+        'name' => 'required|string',
+        'thumbnail' => 'required|image',
+        'description' => 'required|string',
+        'materials.*.title' => 'required|string',
+        'materials.*.video' => 'required|url'
+    ]);
+
+    $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
+
+    $course = Course::create([
+        'name' => $validated['name'],
+        'description' => $validated['description'],
+        'thumbnail' => $thumbnailPath,
+        'status' => 'aktif'
+    ]);
+
+    foreach ($request->materials as $material) {
+        $course->materials()->create([
+            'title' => $material['title'],
+            'video_url' => $material['video']
         ]);
-
-        $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
-
-        $course = Course::create([
-            'name' => $request->name,
-            'mentor' => $request->mentor,
-            'thumbnail' => $thumbnailPath,
-            'description' => $request->description,
-            'status' => 'active',
-        ]);
-
-        foreach ($request->materials as $materialTitle) {
-            Material::create([
-                'course_id' => $course->id,
-                'title' => $materialTitle
-            ]);
-        }
-
-        return redirect()->route('datacourse')->with('success', 'Course created successfully.');
     }
+
+    return redirect()->route('courses.index')->with('success', 'Course berhasil ditambahkan.');
+}
+
 
     public function edit(Course $course)
     {
@@ -58,28 +57,36 @@ class CourseController extends Controller
     public function update(Request $request, Course $course)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'mentor' => 'required|string|max:255',
+            'name' => 'required|string',
             'description' => 'required|string',
-            'materials' => 'required|array',
-            'materials.*' => 'required|string'
+            'thumbnail' => 'nullable|image',
+            'materials.*.title' => 'required|string',
+            'materials.*.video' => 'required|string',
         ]);
-
-        $course->update([
-            'name' => $request->name,
-            'mentor' => $request->mentor,
-            'description' => $request->description,
-        ]);
-
-        foreach ($request->materials as $materialTitle) {
-            $course->materials()->updateOrCreate(
-                ['title' => $materialTitle],
-                ['course_id' => $course->id, 'title' => $materialTitle]
-            );
+    
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $course->thumbnail = $path;
         }
-
-        return redirect()->route('datacourse')->with('success', 'Course updated successfully.');
+    
+        $course->name = $request->name;
+        $course->description = $request->description;
+        $course->save();
+    
+        // Hapus materi lama
+        $course->materials()->delete();
+    
+        // Tambah materi baru
+        foreach ($request->materials as $material) {
+            $course->materials()->create([
+                'title' => $material['title'],
+                'video_url' => $material['video'],
+            ]);
+        }
+    
+        return redirect()->route('courses.index')->with('success', 'Course berhasil diperbarui.');
     }
+    
 
     public function destroy(Course $course)
     {
