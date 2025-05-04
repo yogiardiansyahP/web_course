@@ -113,4 +113,11 @@ class CourseController extends Controller
 
         return redirect()->route('courses.index')->with('success', 'Course berhasil dihapus.');
     }
+
+    public function showCourses()
+{
+    $courses = Course::with('materials')->get(); // pakai relasi jika perlu
+    return view('kelas', compact('courses')); // GANTI 'home' dengan nama file view kamu tanpa .blade.php
+}
+
 }

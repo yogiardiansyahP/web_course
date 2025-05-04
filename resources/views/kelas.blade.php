@@ -17,43 +17,21 @@
     <p class="subtitle">Jelajahi berbagai pilihan kelas dan tingkatkan keterampilan anda</p>
 
     <div class="grid">
-      <div class="card" data-class="php-dasar">
-        <img src="{{ asset('asset/logo_php.png') }}" alt="PHP Dasar" />
-        <div>
-          <h2>Php Dasar</h2>
-          <p>12 Pelajaran</p>
-          <a href="#" class="view-detail">Lihat Detail</a>
-        </div>
-      </div>
-
-      <div class="card" data-class="figma-dasar">
-        <img src="{{ asset('asset/logo_figma.png') }}" alt="Figma Dasar" />
-        <div>
-          <h2>Figma Dasar</h2>
-          <p>8 Pelajaran</p>
-          <a href="#" class="view-detail">Lihat Detail</a>
-        </div>
-      </div>
-
-      <div class="card" data-class="laravel-pemula">
-        <img src="{{ asset('asset/logo_laravel.png') }}" alt="Laravel" />
-        <div>
-          <h2>Laravel Untuk Pemula</h2>
-          <p>10 Pelajaran</p>
-          <a href="#" class="view-detail">Lihat Detail</a>
-        </div>
-      </div>
-
-      <div class="card" data-class="python-pemula">
-        <img src="{{ asset('asset/logo_python.png') }}" alt="Python" />
-        <div>
-          <h2>Python Untuk Pemula</h2>
-          <p>14 Pelajaran</p>
-          <a href="#" class="view-detail">Lihat Detail</a>
-        </div>
-      </div>
+      @foreach ($courses as $course)
+          <div class="card" data-class="php-dasar">
+              <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
+              <div>
+                  <h2>{{ $course->name }}</h2>
+                  <p>{{ $course->materials->count() }} Pelajaran</p>
+                  <a href="{{ route('kelas', $course->id) }}" class="view-detail">Lihat Detail</a>
+              </div>
+          </div>
+      @endforeach
     </div>
+    
+  
   </div>
+  
 
   <script>
     const userLoggedIn = @json(auth()->check());

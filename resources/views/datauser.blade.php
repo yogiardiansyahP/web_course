@@ -44,9 +44,17 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse ($users as $user)
+                        <tr>
+                            <td style="padding: 10px;">{{ $user->id }}</td>
+                            <td style="padding: 10px;">{{ $user->name }}</td>
+                            <td style="padding: 10px;">{{ $user->email }}</td>
+                        </tr>
+                    @empty
                         <tr>
                             <td colspan="3" style="text-align: center; padding: 20px; color: #6c757d;">Tidak ada user</td>
                         </tr>
+                    @endforelse
                     </tbody>
                 </table>
                 <label for="limit">Limit:
