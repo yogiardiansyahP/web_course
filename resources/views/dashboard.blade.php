@@ -29,10 +29,10 @@
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Codein Course" class="logo">
   <a href="#" class="active">Dashboard</a>
-<a href="{{ route('kelas') }}">Course</a>
-<a href="{{ route('sertifikat') }}">Sertifikat</a>
-<a href="{{ route('transaksi') }}">Transaksi</a>
-<a href="{{ route('pengaturan') }}">Pengaturan</a>
+  <a href="{{ route('kelas') }}">Course</a>
+  <a href="{{ route('sertifikat') }}">Sertifikat</a>
+  <a href="{{ route('transaksi') }}">Transaksi</a>
+  <a href="{{ route('pengaturan') }}">Pengaturan</a>
   <hr style="margin: 20px 0;">
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     @csrf
@@ -51,11 +51,11 @@
 
   <div class="stats">
     <div class="stat-box">
-    <strong>{{ Auth::user()->name ?? 'Tamu' }}</strong><br/>
-    {{ Auth::user()->name ?? 'Silakan login' }}
+      <strong>{{ Auth::user()->name ?? 'Tamu' }}</strong><br/>
+      {{ Auth::user()->email ?? 'Silakan login' }}
     </div>
     <div class="stat-box">
-      <strong>Total Kelas</strong><br/>0
+      <strong>Total Kelas</strong><br/>{{ $courses->count() }}
     </div>
     <div class="stat-box">
       <strong>Sedang Berjalan</strong><br/>0
@@ -70,8 +70,9 @@
     <canvas id="progressChart" width="400" height="200"></canvas>
   </div>
 
-  <h3 style="margin-bottom: 30px">Gabung Kelas Unggulan CodeIn Course</h3>
+  <h3 style="margin-bottom: 30px">Rekomendasi Course</h3>
   <div class="cards">
+    {{-- Static course --}}
     <a href="{{ route('checkout') }}" style="text-decoration: none; color: inherit;">
       <div class="course-card">
         <img src="{{ asset('asset/dashboard_course.png') }}" alt="Course 1">
@@ -82,11 +83,25 @@
         </div>
       </div>
     </a>
+
+    {{-- Dynamic courses from DB --}}
+    @foreach ($courses as $course)
+      <a href="{{ route('checkout', ['id' => $course->id]) }}" style="text-decoration: none; color: inherit;">
+        <div class="course-card">
+          <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('asset/dashboard_course.png') }}" alt="{{ $course->name }}">
+          <div class="content">
+            <p>{{ $course->name }}</p>
+            <p class="price">Mentor: {{ $course->mentor }}</p>
+            <p class="discount">{{ \Illuminate\Support\Str::limit($course->description, 50) }}</p>
+          </div>
+        </div>
+      </a>
+    @endforeach
   </div>
 </main>
 
 <script>
-    window.progressData = @json($progressDataFilled ?? []);
+  window.progressData = @json($progressDataFilled ?? []);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
