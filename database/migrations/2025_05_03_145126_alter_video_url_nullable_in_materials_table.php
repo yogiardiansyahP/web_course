@@ -6,24 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('materials', function (Blueprint $table) {
-            $table->string('video_url')->nullable()->change();
+            if (!Schema::hasColumn('materials', 'video_url')) {
+                $table->string('video_url')->nullable();
+            } else {
+                $table->string('video_url')->nullable()->change();
+            }
         });
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('materials', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('materials', 'video_url')) {
+                $table->dropColumn('video_url');
+            }
         });
     }
 };

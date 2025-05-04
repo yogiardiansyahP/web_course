@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProgressBelajar;
+use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 
 class ProgressController extends Controller
@@ -16,17 +17,17 @@ class ProgressController extends Controller
             ->get(['persentase'])
             ->pluck('persentase')
             ->toArray();
-        
-        // Memastikan data progress diisi untuk semua bulan jika ada data yang kurang
+
         $progressDataFilled = array_fill(0, 11, 0);
         foreach ($progressData as $value) {
             $progressDataFilled[] = $value;
         }
-        
-        // Memastikan array progress tidak lebih dari 11 bulan
+
         $progressDataFilled = array_slice($progressDataFilled, -11);
-        
-        return view('dashboard', compact('progressDataFilled'));
+
+        $courses = Course::with('materials')->where('status', 'aktif')->get();
+
+        return view('dashboard', compact('progressDataFilled', 'courses'));
     }
 
     public function update(Request $request)

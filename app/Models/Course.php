@@ -12,11 +12,26 @@ class Course extends Model
     protected $table = 'courses';
 
     protected $fillable = [
-        'name', 'mentor', 'students_count', 'status'
+        'name',
+        'thumbnail',
+        'description',
+        'mentor',
+        'status',
     ];
 
     public function materials()
     {
         return $this->hasMany(Material::class);
+    }
+
+    const STATUS_ACTIVE = 'aktif';
+    const STATUS_INACTIVE = 'nonaktif';
+
+    public static function getAvailableStatuses()
+    {
+        return [
+            self::STATUS_ACTIVE,
+            self::STATUS_INACTIVE,
+        ];
     }
 }

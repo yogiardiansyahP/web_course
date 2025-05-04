@@ -11,12 +11,11 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('course_id');
             $table->string('title');
-            $table->string('video_url');
-            $table->timestamps();
-        
+            $table->string('video_url')->nullable();
+
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->timestamps();
         });
-        
     }
 
     public function down()

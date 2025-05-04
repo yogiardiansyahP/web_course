@@ -4,13 +4,13 @@
 <div class="course-container">
     <h2>Edit Course</h2>
 
-    <form action="{{ route('update', $course->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="form-group">
             <label for="name">Nama</label>
-            <input type="text" name="name" value="{{ $course->name }}" class="form-control" required>
+            <input type="text" name="name" value="{{ old('name', $course->name) }}" class="form-control" required>
         </div>
 
         <div class="form-group">
@@ -22,7 +22,20 @@
 
         <div class="form-group">
             <label for="description">Deskripsi</label>
-            <textarea name="description" class="form-control" rows="3" required>{{ $course->description }}</textarea>
+            <textarea name="description" class="form-control" rows="3" required>{{ old('description', $course->description) }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="mentor">Mentor</label>
+            <input type="text" name="mentor" value="{{ old('mentor', $course->mentor) }}" class="form-control" placeholder="Nama Mentor" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select name="status" class="form-control" required>
+                <option value="aktif" {{ $course->status == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                <option value="nonaktif" {{ $course->status == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+            </select>
         </div>
 
         <div id="materiContainer">
@@ -30,10 +43,10 @@
             @foreach ($course->materials as $index => $material)
             <div class="materi-item row mb-2">
                 <div class="col-md-6">
-                    <input type="text" name="materials[{{ $index }}][title]" value="{{ $material->title }}" class="form-control" placeholder="Judul Materi" required>
+                    <input type="text" name="materials[{{ $index }}][title]" value="{{ old('materials.' . $index . '.title', $material->title) }}" class="form-control" placeholder="Judul Materi" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" name="materials[{{ $index }}][video]" value="{{ $material->video_url }}" class="form-control" placeholder="Link Video" required>
+                    <input type="text" name="materials[{{ $index }}][video]" value="{{ old('materials.' . $index . '.video', $material->video_url) }}" class="form-control" placeholder="Link Video" required>
                 </div>
             </div>
             @endforeach
@@ -63,4 +76,5 @@
         container.appendChild(materiItem);
     }
 </script>
+
 @endsection

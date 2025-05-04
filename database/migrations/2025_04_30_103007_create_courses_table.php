@@ -13,13 +13,12 @@ class CreateCoursesTable extends Migration
             $table->string('name');
             $table->string('thumbnail');
             $table->text('description');
-            $table->string('mentor');
-
+            $table->string('mentor')->nullable();
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
-        
     }
+    
     public function down()
     {
         Schema::dropIfExists('courses');

@@ -221,3 +221,32 @@ table img {
     color: white;
     border-color: #007bff;
 }
+
+.custom-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.custom-btn:active {
+    background-color: #004085;
+}
+
+.custom-btn.danger {
+    background-color: #dc3545;
+}
+
+.custom-btn.danger:hover {
+    background-color: #c82333;
+}

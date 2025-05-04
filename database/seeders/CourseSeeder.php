@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Course;
+use App\Models\Material;
 use Faker\Factory as Faker;
 
 class CourseSeeder extends Seeder
@@ -14,25 +15,44 @@ class CourseSeeder extends Seeder
 
         // Data manual awal
         $courses = [
-            ['name' => 'Laravel Basics', 'mentor' => 'Ahmad', 'students_count' => 120, 'status' => 'published'],
-            ['name' => 'Flutter Mastery', 'mentor' => 'Budi', 'students_count' => 95, 'status' => 'published'],
-            ['name' => 'React Fundamentals', 'mentor' => 'Citra', 'students_count' => 78, 'status' => 'draft'],
-            ['name' => 'Data Science Intro', 'mentor' => 'Dewi', 'students_count' => 60, 'status' => 'published'],
-            ['name' => 'UI/UX Design', 'mentor' => 'Eka', 'students_count' => 45, 'status' => 'draft'],
+            ['name' => 'Laravel Basics', 'thumbnail' => $faker->imageUrl(), 'description' => $faker->paragraph(), 'mentor' => 'Ahmad', 'status' => 'aktif'],
+            ['name' => 'Flutter Mastery', 'thumbnail' => $faker->imageUrl(), 'description' => $faker->paragraph(), 'mentor' => 'Budi', 'status' => 'aktif'],
+            ['name' => 'React Fundamentals', 'thumbnail' => $faker->imageUrl(), 'description' => $faker->paragraph(), 'mentor' => 'Citra', 'status' => 'nonaktif'],
+            ['name' => 'Data Science Intro', 'thumbnail' => $faker->imageUrl(), 'description' => $faker->paragraph(), 'mentor' => 'Dewi', 'status' => 'aktif'],
+            ['name' => 'UI/UX Design', 'thumbnail' => $faker->imageUrl(), 'description' => $faker->paragraph(), 'mentor' => 'Eka', 'status' => 'nonaktif'],
         ];
 
-        foreach ($courses as $course) {
-            Course::create($course);
+        foreach ($courses as $courseData) {
+            $course = Course::create($courseData);
+
+            // Tambahkan beberapa materi untuk setiap course
+            for ($i = 0; $i < 3; $i++) {
+                Material::create([
+                    'course_id' => $course->id,
+                    'title' => $faker->sentence(3),
+                    'video_url' => $faker->url,
+                ]);
+            }
         }
 
         // Tambah data palsu
         for ($i = 0; $i < 20; $i++) {
-            Course::create([
+            $course = Course::create([
                 'name' => $faker->sentence(3),
+                'thumbnail' => $faker->imageUrl(),
+                'description' => $faker->paragraph(),
                 'mentor' => $faker->firstName,
-                'students_count' => $faker->numberBetween(10, 150),
-                'status' => $faker->randomElement(['published', 'draft']),
+                'status' => $faker->randomElement(['aktif', 'nonaktif']),
             ]);
+
+            // Tambahkan beberapa materi untuk setiap course palsu
+            for ($j = 0; $j < 3; $j++) {
+                Material::create([
+                    'course_id' => $course->id,
+                    'title' => $faker->sentence(3),
+                    'video_url' => $faker->url,
+                ]);
+            }
         }
     }
 }

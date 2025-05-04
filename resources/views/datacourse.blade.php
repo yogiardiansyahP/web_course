@@ -19,6 +19,17 @@
             <label for="description">Deskripsi</label>
             <textarea name="description" class="form-control" rows="3" required></textarea>
         </div>
+        <div class="form-group">
+            <label for="mentor">Mentor</label>
+            <input type="text" name="mentor" class="form-control" placeholder="Nama Mentor" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select name="status" class="form-control" required>
+                <option value="aktif">Aktif</option>
+                <option value="nonaktif">Nonaktif</option>
+            </select>
+        </div>
 
         <div id="materiContainer">
             <label>Materi Pembelajaran</label>
@@ -46,6 +57,7 @@
                 <th>Thumbnail</th>
                 <th>Deskripsi</th>
                 <th>Materi</th>
+                <th>Mentor</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
@@ -66,12 +78,13 @@
                             @endforeach
                         </ul>
                     </td>
+                    <td>{{ $course->mentor }}</td>
                     <td>{{ $course->status }}</td>
                     <td>
-                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">Edit</a> |
+                        <a href="{{ route('courses.edit', $course->id) }}" class="btn custom-btn">Edit</a> |
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus course ini?')">Hapus</button>
+                            <button type="submit" class="btn custom-btn danger" onclick="return confirm('Hapus course ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
@@ -82,21 +95,21 @@
 
 <script>
     function addMateri() {
-    const container = document.getElementById('materiContainer');
-    const index = container.querySelectorAll('.materi-item').length;
+        const container = document.getElementById('materiContainer');
+        const index = container.querySelectorAll('.materi-item').length;
 
-    const materiItem = document.createElement('div');
-    materiItem.classList.add('materi-item', 'row', 'mb-2');
-    materiItem.innerHTML = `
-        <div class="col-md-6">
-            <input type="text" name="materials[${index}][title]" class="form-control" placeholder="Judul Materi" required>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="materials[${index}][video]" class="form-control" placeholder="Link Video" required>
-        </div>
-    `;
-    container.appendChild(materiItem);
-}
-
+        const materiItem = document.createElement('div');
+        materiItem.classList.add('materi-item', 'row', 'mb-2');
+        materiItem.innerHTML = `
+            <div class="col-md-6">
+                <input type="text" name="materials[${index}][title]" class="form-control" placeholder="Judul Materi" required>
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="materials[${index}][video]" class="form-control" placeholder="Link Video" required>
+            </div>
+        `;
+        container.appendChild(materiItem);
+    }
 </script>
+
 @endsection
