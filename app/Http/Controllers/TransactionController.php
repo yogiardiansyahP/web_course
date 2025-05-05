@@ -18,7 +18,7 @@ class TransactionController extends Controller
     public function show($id)
     {
         $userId = Auth::id();
-        $transaction = Transaction::where('user_id', $userId)->findOrFail($id);
+        $transaction = Transaction::with('course')->where('user_id', $userId)->findOrFail($id);
         return view('transaksi.detail', compact('transaction'));
-    }
+    }    
 }

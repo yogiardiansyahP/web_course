@@ -124,10 +124,7 @@ class CourseController extends Controller
 
     public function showCourses()
     {
-        // Get all courses with their associated materials
         $courses = Course::with('materials')->get();
-
-        // Pass the courses data to the view
         return view('kelas', compact('courses'));
     }
 

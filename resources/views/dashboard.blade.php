@@ -72,12 +72,8 @@
 
   <h3 style="margin-bottom: 30px">Rekomendasi Course</h3>
   <div class="cards">
-    {{-- Static course --}}
-    
-
-    {{-- Dynamic courses from DB --}}
     @foreach ($courses as $course)
-      <a href="{{ route('checkout', ['id' => $course->id]) }}" style="text-decoration: none; color: inherit;">
+      <a href="{{ route('checkout', ['courseId' => $course->id]) }}" style="text-decoration: none; color: inherit;">
         <div class="course-card">
           <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('asset/dashboard_course.png') }}" alt="{{ $course->name }}">
           <div class="content">

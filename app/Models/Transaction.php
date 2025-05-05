@@ -10,16 +10,20 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_id',
         'user_id',
-        'course_name',
-        'price',
-        'discount',
-        'transaction_date',
-        'status',
+        'course_id',
+        'amount',
+        'status'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

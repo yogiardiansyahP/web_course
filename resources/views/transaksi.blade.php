@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sertifikat - Dashboard</title>
+  <title>Detail Transaksi - Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/sertifikat.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/transaksi.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -42,48 +42,45 @@
 </aside>
 
 <main class="main">
-  <h1>Sertifikat</h1>
+  <h1>Detail Transaksi</h1>
 
-  <div class="certificate-card">
-    <p><strong>Username:</strong> {{ Auth::user()->username }}</p>
+  <div class="transaction-detail-card">
+    <div class="transaction-info">
+      <h2>ID Transaksi: {{ $transaction->id }}</h2>
+      <p><strong>Course:</strong> {{ $transaction->course_name }}</p>
+      <p><strong>Status:</strong> {{ $transaction->status }}</p>
+      <p><strong>Total Pembayaran:</strong> Rp {{ number_format($transaction->price, 0, ',', '.') }}</p>
+      @if($transaction->discount)
+        <p><strong>Diskon:</strong> Rp {{ number_format($transaction->discount, 0, ',', '.') }}</p>
+      @endif
+      <p><strong>Tanggal:</strong> {{ $transaction->transaction_date->format('d-m-Y H:i:s') }}</p>
+    </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID Sertifikat</th>
-          <th>Nama Course</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse ($certificates as $certificate)
-          <tr>
-            <td>{{ $certificate->id }}</td>
-            <td>{{ $certificate->course->title }}</td>
-            <td>
-              <a href="{{ route('sertifikat.detail', $certificate->id) }}" target="_blank" class="btn-view">Lihat</a>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="3" class="no-data">Tidak ada sertifikat</td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
-
-    <div class="limit-control">
-      <label for="limit">Limit:</label>
-      <select id="limit" name="limit">
-        <option value="4">4</option>
-        <option value="8">8</option>
-        <option value="12">12</option>
-      </select>
+    <div class="transaction-actions">
+      @if($transaction->status == 'pending')
+        <button onclick="refreshTransaction()">Refresh Status</button>
+      @endif
+      <a href="{{ route('transaksi') }}" class="btn-back">Kembali</a>
     </div>
   </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/dashboard.js') }}"></script>
+<script>
+  function refreshTransaction() {
+    Swal.fire({
+      title: 'Refresh Status?',
+      text: 'Apakah Anda yakin ingin merefresh status transaksi?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, refresh',
+      cancelButtonText: 'Tidak'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
+    });
+  }
+</script>
+
 </body>
 </html>

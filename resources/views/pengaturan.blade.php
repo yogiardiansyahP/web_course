@@ -16,12 +16,11 @@
         </div>
         <nav>
         <ul>
-          <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li><a href="{{ route('kelas') }}">Bootcamp</a></li>
-          <li><a href="{{ route('kelas') }}">Course</a></li>
-          <li><a href="{{ route('sertifikat') }}">Sertifikat</a></li>
-          <li><a href="{{ route('transaksi') }}">Transaksi</a></li>
-          <li class="active"><a href="{{ route('pengaturan') }}">Pengaturan</a></li>
+        <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
+        <a href="{{ route('kelas') }}" class="menu-item">Course</a>
+        <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
+        <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
+        <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
         </ul>
         </nav>
       </div>
@@ -37,7 +36,6 @@
     <main class="main-content">
       <header>
         <h1>Pengaturan</h1>
-        <img class="user-avatar" src="{{ asset('asset/avatar.png') }}" alt="User Avatar" />
       </header>
 
       <section class="tabs">
@@ -47,24 +45,17 @@
 
       <section class="profile-form">
         <h2>Profile</h2>
-        <p>Kelola avatar dan data profile kamu</p>
-        <div class="avatar-section">
-          <img src="{{ asset('asset/avatar.png') }}" alt="Avatar" class="avatar" />
-          <button class="edit-avatar">✏️</button>
-        </div>
+        <p>Kelola data profile kamu</p>
 
         <form action="{{ route('pengaturan.update') }}" method="POST">
           @csrf
           @method('PUT')
 
-          <label>Username</label>
-          <input type="text" value="{{ $user->username ?? 'user123' }}" name="username" readonly />
-
           <label>Email</label>
           <input type="email" value="{{ $user->email }}" name="email" readonly />
 
-          <label>Full Name</label>
-          <input type="text" value="{{ $user->name }}" name="name" />
+          <label>Username</label>
+          <input type="text" value="{{ $user->name }}" name="name" required />
 
           <button type="submit" class="save-btn">Simpan Perubahan</button>
         </form>

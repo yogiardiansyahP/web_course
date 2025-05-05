@@ -14,26 +14,20 @@
         <img src="{{ asset('asset/logo.png') }}" alt="Codein Course" />
       </div>
       <ul class="nav-links">
-
         <li><a href="{{ route('home') }}" class="active">Beranda</a></li>
-        <li><a href="{{ route('kontak') }}">Tentang Kami</a></li>
-    
-       
-        <li><a href="{{ route('tentang') }}">Kontak</a></li>
-
+        <li><a href="{{ route('tentang') }}">Tentang Kami</a></li>
+        <li><a href="{{ route('kontak') }}">Kontak</a></li>
       </ul>
       <div class="auth-buttons">
         @if(Auth::check())
-          <!-- Jika user sudah login -->
           <a href="{{ route('logout') }}" class="btn-filled" 
-             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             Logout
           </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
           </form>
         @else
-          <!-- Jika user belum login -->
           <a href="{{ route('register') }}" class="btn-outline">Daftar</a>
           <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
         @endif

@@ -26,20 +26,14 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/kelas', function () {
-    return view('kelas');
-})->name('kelas');
-
-Route::get('/kembali', function () {
+Route::get('/home', function () {
     return view('welcome');
 })->name('kembali');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
-    Route::get('/checkout', function () {
-        return view('checkout');
-    })->name('checkout');
-    Route::get('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
+    Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
     Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
@@ -56,17 +50,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
+    Route::get('/transaksi/{transaction}', [TransactionController::class, 'showDetail'])->name('transaksi.detail');
+    Route::post('/midtrans/webhook', [CheckoutController::class, 'handlePaymentCallback']);
 });
 
 Route::get('/tentang', function () {
-    return view('kontak');
+    return view('tentang_kami');
 })->name('tentang');
 
 Route::get('/kontak', function () {
-    return view('tentang_kami');
+    return view('kontak');
 })->name('kontak');
 
 Route::get('/datauser', [AdminController::class, 'dataUser'])->name('datauser');
-
-Route::get('/courses', [CourseController::class, 'showCourses'])->name('courses.public');
-
+Route::get('/kelas', [CourseController::class, 'showCourses'])->name('kelas');

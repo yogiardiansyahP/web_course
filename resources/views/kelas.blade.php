@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="container">
-    <a href="{{ route('kembali') }}" class="back">Kembali</a>
+    <a href="{{ route('dashboard') }}" class="back">Kembali</a>
     <h1>Kelas Yang Tersedia</h1>
     <p class="subtitle">Jelajahi berbagai pilihan kelas dan tingkatkan keterampilan anda</p>
 

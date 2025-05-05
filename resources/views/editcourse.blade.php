@@ -8,13 +8,11 @@
         @csrf
         @method('PUT')
 
-        <!-- Nama Course -->
         <div class="form-group">
             <label for="name">Nama</label>
             <input type="text" name="name" value="{{ old('name', $course->name) }}" class="form-control" required>
         </div>
 
-        <!-- Thumbnail -->
         <div class="form-group">
             <label for="thumbnail">Thumbnail Baru (jika ingin mengganti)</label>
             <input type="file" name="thumbnail" class="form-control-file" accept="image/*">
@@ -22,19 +20,16 @@
             <img src="{{ asset('storage/' . $course->thumbnail) }}" width="150">
         </div>
 
-        <!-- Deskripsi -->
         <div class="form-group">
             <label for="description">Deskripsi</label>
             <textarea name="description" class="form-control" rows="3" required>{{ old('description', $course->description) }}</textarea>
         </div>
 
-        <!-- Mentor -->
         <div class="form-group">
             <label for="mentor">Mentor</label>
-            <input type="text" name="mentor" value="{{ old('mentor', $course->mentor) }}" class="form-control" placeholder="Nama Mentor" required>
+            <input type="text" name="mentor" value="{{ old('mentor', $course->mentor) }}" class="form-control" required>
         </div>
 
-        <!-- Status -->
         <div class="form-group">
             <label for="status">Status</label>
             <select name="status" class="form-control" required>
@@ -43,23 +38,21 @@
             </select>
         </div>
 
-        <!-- Harga -->
         <div class="form-group">
             <label for="price">Harga</label>
             <input type="number" name="price" value="{{ old('price', $course->price) }}" class="form-control" required>
         </div>
 
-        <!-- Materi Pembelajaran -->
         <div id="materiContainer">
             <label>Materi Pembelajaran</label>
             @foreach ($course->materials as $index => $material)
             <div class="materi-item row mb-2">
                 <input type="hidden" name="materials[{{ $index }}][id]" value="{{ $material->id }}">
                 <div class="col-md-6">
-                    <input type="text" name="materials[{{ $index }}][title]" value="{{ old('materials.' . $index . '.title', $material->title) }}" class="form-control" placeholder="Judul Materi" required>
+                    <input type="text" name="materials[{{ $index }}][title]" value="{{ old('materials.' . $index . '.title', $material->title) }}" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" name="materials[{{ $index }}][video]" value="{{ old('materials.' . $index . '.video', $material->video_url) }}" class="form-control" placeholder="Link Video" required>
+                    <input type="text" name="materials[{{ $index }}][video]" value="{{ old('materials.' . $index . '.video', $material->video_url) }}" class="form-control" required>
                 </div>
             </div>
             @endforeach

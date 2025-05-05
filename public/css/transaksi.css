@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    display: flex;
+    background-color: #f9f9fb;
+  }
+  
+  .sidebar {
+    width: 240px;
+    background-color: #fff;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    height: 100vh;
+    position: fixed;
+  }
+  
+  .sidebar img.logo {
+    width: 150px;
+    margin-bottom: 30px;
+  }
+  
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  
+  .sidebar a:hover,
+  .sidebar a.active {
+    background-color: #e0edff;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .main {
+    margin-left: 260px;
+    padding: 30px;
+    width: 100%;
+  }
+  
+  .main h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .alert {
+    background-color: #e0edff;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #1e40af;
+  }
+  
+  .transaction-card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
+  .transaction-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .transaction-card th,
+  .transaction-card td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .transaction-card th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+  }
+  
+  .btn-view {
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  
+  .btn-view:hover {
+    background-color: #1e40af;
+  }
+  
+  .no-data {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+  }
+  
+  .limit-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  
+  .limit-control select {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
