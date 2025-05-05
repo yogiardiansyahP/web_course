@@ -68,4 +68,5 @@ Route::get('/kontak', function () {
 
 Route::get('/datauser', [AdminController::class, 'dataUser'])->name('datauser');
 
-Route::get('/courses', [CourseController::class, 'showCourses'])->name('kelas');
+Route::get('/courses', [CourseController::class, 'showCourses'])->name('courses.public');
+

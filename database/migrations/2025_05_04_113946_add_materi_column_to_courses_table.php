@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->text('materi')->nullable()->after('description');
+            $table->text('materi')->nullable(); // Tanpa after
         });
     }
 

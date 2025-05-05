@@ -23,6 +23,12 @@
             <label for="mentor">Mentor</label>
             <input type="text" name="mentor" class="form-control" placeholder="Nama Mentor" required>
         </div>
+
+        <div class="form-group">
+            <label for="price">Harga</label>
+            <input type="number" name="price" class="form-control" placeholder="Masukkan harga course" required>
+        </div>
+        
         <div class="form-group">
             <label for="status">Status</label>
             <select name="status" class="form-control" required>
@@ -58,6 +64,7 @@
                 <th>Deskripsi</th>
                 <th>Materi</th>
                 <th>Mentor</th>
+                <th>Harga</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
@@ -79,6 +86,8 @@
                         </ul>
                     </td>
                     <td>{{ $course->mentor }}</td>
+                    <td>Rp {{ number_format($course->price, 0, ',', '.') }}</td>
+
                     <td>{{ $course->status }}</td>
                     <td>
                         <a href="{{ route('courses.edit', $course->id) }}" class="btn custom-btn">Edit</a> |

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,43 +63,50 @@ class CourseController extends Controller
         return view('editcourse', compact('course'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Course $course)
     {
-        $course = Course::findOrFail($id);
-    
-        $request->validate([
+        // Validasi input
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required',
+            'description' => 'required|string',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png',
+            'mentor' => 'required|string|max:255',
             'status' => 'required|in:aktif,nonaktif',
-            'mentor' => 'nullable|string|max:255',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'price' => 'required|numeric',
+            'materials.*.title' => 'required|string',
+            'materials.*.video' => 'nullable|url',
         ]);
-    
-        $course->name = $request->name;
-        $course->description = $request->description;
-        $course->status = $request->status;
-        $course->mentor = $request->mentor;
-    
+
+        // Menyimpan Thumbnail (jika ada)
         if ($request->hasFile('thumbnail')) {
-            if ($course->thumbnail && Storage::exists('public/' . $course->thumbnail)) {
-                Storage::delete('public/' . $course->thumbnail);
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails');
+        }
+
+        // Update data course
+        $course->update($validated);
+
+        // Update atau tambahkan materi
+        if ($request->has('materials')) {
+            foreach ($request->materials as $index => $materialData) {
+                if (isset($materialData['id'])) {
+                    // Update materi yang sudah ada
+                    $material = Material::find($materialData['id']);
+                    $material->update([
+                        'title' => $materialData['title'],
+                        'video_url' => $materialData['video'],
+                    ]);
+                } else {
+                    // Tambah materi baru
+                    Material::create([
+                        'course_id' => $course->id,
+                        'title' => $materialData['title'],
+                        'video_url' => $materialData['video'],
+                    ]);
+                }
             }
-            $path = $request->file('thumbnail')->store('thumbnails', 'public');
-            $course->thumbnail = $path;
         }
-    
-        $course->save();
-    
-        $course->materials()->delete();
-        $materials = $request->input('materials', []);
-        foreach ($materials as $material) {
-            $course->materials()->create([
-                'title' => $material['title'],
-                'video_url' => $material['video'],
-            ]);
-        }
-    
-        return redirect()->route('courses.index');
+
+        return redirect()->route('courses.index')->with('success', 'Course updated successfully');
     }
     
 
@@ -115,9 +123,12 @@ class CourseController extends Controller
     }
 
     public function showCourses()
-{
-    $courses = Course::with('materials')->get(); // pakai relasi jika perlu
-    return view('kelas', compact('courses')); // GANTI 'home' dengan nama file view kamu tanpa .blade.php
-}
+    {
+        // Get all courses with their associated materials
+        $courses = Course::with('materials')->get();
+
+        // Pass the courses data to the view
+        return view('kelas', compact('courses'));
+    }
 
 }

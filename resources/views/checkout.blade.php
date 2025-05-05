@@ -18,7 +18,8 @@
         <h1 class="checkout-title">Checkout</h1>
 
         @php
-            $hargaAwal = 2500000;
+            // If you have price or other data, you can get it from the $course object
+            $hargaAwal = $course->price;  // Assuming 'price' is a column in the 'courses' table
         @endphp
 
         <div class="checkout-grid">
@@ -42,9 +43,9 @@
             </div>
 
             <div class="course-card">
-                <img src="{{ asset('asset/course-image-placeholder.png') }}" alt="Course">
+                <img src="{{ asset('storage/' . $course->thumbnail ?? 'asset/course-image-placeholder.png') }}" alt="Course">
                 <div class="course-info">
-                    <p class="course-title">Belajar JavaScript dari Nol</p>
+                    <p class="course-title">{{ $course->name }}</p>  <!-- Dynamically show the course name -->
                     <a href="{{ route('kelas') }}">Lihat Detail Kelas</a>
                 </div>
             </div>
@@ -53,8 +54,8 @@
                 <h2>Ringkasan Pesanan</h2>
                 <div class="order-summary">
                     <div class="item">
-                        <span>Belajar JavaScript dari Nol</span>
-                        <span id="hargaAwal">Rp {{ number_format($hargaAwal, 0, ',', '.') }}</span>
+                        <span>{{ $course->name }}</span>  <!-- Dynamically show the course name -->
+                        <span id="hargaAwal">Rp {{ number_format($hargaAwal, 0, ',', '.') }}</span> <!-- Dynamically show the price -->
                     </div>
                     <div class="item">
                         <span>SubTotal</span>

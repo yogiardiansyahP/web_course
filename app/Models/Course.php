@@ -17,6 +17,7 @@ class Course extends Model
         'description',
         'mentor',
         'status',
+        'price'
     ];
 
     public function materials()

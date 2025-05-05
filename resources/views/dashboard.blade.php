@@ -73,16 +73,7 @@
   <h3 style="margin-bottom: 30px">Rekomendasi Course</h3>
   <div class="cards">
     {{-- Static course --}}
-    <a href="{{ route('checkout') }}" style="text-decoration: none; color: inherit;">
-      <div class="course-card">
-        <img src="{{ asset('asset/dashboard_course.png') }}" alt="Course 1">
-        <div class="content">
-          <p>Belajar JavaScript Dari Nol</p>
-          <p class="price">Rp. 2.500.000</p>
-          <p class="discount">Rp. 250.000</p>
-        </div>
-      </div>
-    </a>
+    
 
     {{-- Dynamic courses from DB --}}
     @foreach ($courses as $course)
@@ -91,8 +82,8 @@
           <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('asset/dashboard_course.png') }}" alt="{{ $course->name }}">
           <div class="content">
             <p>{{ $course->name }}</p>
-            <p class="price">Mentor: {{ $course->mentor }}</p>
-            <p class="discount">{{ \Illuminate\Support\Str::limit($course->description, 50) }}</p>
+            <p class="price">Rp.250.000: {{ $course->mentor }}</p>
+            <p class="discount">Rp.{{ \Illuminate\Support\Str::limit($course->price, 50) }}</p>
           </div>
         </div>
       </a>

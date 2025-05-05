@@ -18,15 +18,16 @@
 
     <div class="grid">
       @foreach ($courses as $course)
-          <div class="card" data-class="php-dasar">
-              <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
-              <div>
-                  <h2>{{ $course->name }}</h2>
-                  <p>{{ $course->materials->count() }} Pelajaran</p>
-                  <a href="{{ route('kelas', $course->id) }}" class="view-detail">Lihat Detail</a>
-              </div>
-          </div>
-      @endforeach
+    <div class="card" data-class="php-dasar">
+        <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
+        <div>
+            <h2>{{ $course->name }}</h2>
+            <p>{{ $course->materials->count() }} Pelajaran</p>
+            <a href="{{ route('kelas', $course->id) }}" class="view-detail">Lihat Detail</a>
+        </div>
+    </div>
+@endforeach
+
     </div>
     
   
