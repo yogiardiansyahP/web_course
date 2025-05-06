@@ -14,11 +14,11 @@ class TransactionController extends Controller
         $transactions = Transaction::where('user_id', $userId)->get();
         return view('transaksi', compact('transactions'));
     }
-
+    
     public function show($id)
     {
         $userId = Auth::id();
         $transaction = Transaction::with('course')->where('user_id', $userId)->findOrFail($id);
         return view('transaksi.detail', compact('transaction'));
-    }    
+    }      
 }

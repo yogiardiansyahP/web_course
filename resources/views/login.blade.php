@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Codein Course</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
 <body>
@@ -22,7 +23,6 @@
         @csrf
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
-      <form action="{{ route('dashboard') }}" method="GET">
         <div class="forgot-password">
           <a href="#">Lupa kata sandi?</a>
         </div>

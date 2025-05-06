@@ -10,6 +10,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CourseController;
 
+// Web Routes
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
-    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
+    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi');
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
@@ -51,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
-    Route::get('/transaksi/{transaction}', [TransactionController::class, 'showDetail'])->name('transaksi.detail');
+    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.show');
     Route::post('/midtrans/webhook', [CheckoutController::class, 'handlePaymentCallback']);
 });
 
@@ -65,3 +66,15 @@ Route::get('/kontak', function () {
 
 Route::get('/datauser', [AdminController::class, 'dataUser'])->name('datauser');
 Route::get('/kelas', [CourseController::class, 'showCourses'])->name('kelas');
+
+// API Routes
+Route::prefix('api')->group(function () {
+    Route::post('/login', [AuthController::class, 'apiLogin'])->name('api.login');
+    Route::post('/register', [AuthController::class, 'apiRegister'])->name('api.register');
+    Route::post('/logout', [AuthController::class, 'apiLogout'])->middleware('auth:sanctum')->name('api.logout');
+    Route::apiResource('/courses', CourseController::class);
+    Route::apiResource('/transactions', TransactionController::class);
+    Route::apiResource('/certificates', CertificateController::class);
+    Route::put('/settings/profile', [SettingController::class, 'apiUpdateProfile'])->middleware('auth:sanctum')->name('api.settings.updateProfile');
+    Route::put('/settings/password', [SettingController::class, 'apiUpdatePassword'])->middleware('auth:sanctum')->name('api.settings.updatePassword');
+});

@@ -28,7 +28,7 @@ class AdminController extends Controller
 
     public function dataUser()
 {
-    $users = User::all(); // Ambil semua user
+    $users = User::all();
     return view('datauser', compact('users'));
 }
 
