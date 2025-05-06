@@ -28,11 +28,11 @@
 
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Codein Course" class="logo">
-  <a href="#" class="active">Dashboard</a>
-  <a href="{{ route('kelas') }}">Course</a>
+  <a href="{{ route('dashboard') }}">Dashboard</a>
+  <a href="{{ route('daftarcourse') }}">Course</a>
   <a href="{{ route('sertifikat') }}">Sertifikat</a>
   <a href="{{ route('transaksi') }}">Transaksi</a>
-  <a href="{{ route('pengaturan') }}">Pengaturan</a>
+  <a href="{{ route('pengaturan') }}" class="active">Pengaturan</a>
   <hr style="margin: 20px 0;">
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     @csrf
@@ -40,6 +40,7 @@
   <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
   <a href="{{ route('login') }}">Contact Support</a>
 </aside>
+
 
 <main class="main">
   <h1>Dashboard</h1>

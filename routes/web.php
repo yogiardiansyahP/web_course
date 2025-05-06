@@ -65,3 +65,4 @@ Route::get('/kontak', function () {
 
 Route::get('/datauser', [AdminController::class, 'dataUser'])->name('datauser');
 Route::get('/kelas', [CourseController::class, 'showCourses'])->name('kelas');
+Route::get('/daftarcourse', [CourseController::class, 'showData'])->name('daftarcourse');

@@ -127,5 +127,11 @@ class CourseController extends Controller
         $courses = Course::with('materials')->get();
         return view('kelas', compact('courses'));
     }
+    public function showData()
+{
+    $courses = Course::with('materials')->get();
+    return view('daftarcourse', compact('courses'));
+}
+
 
 }
