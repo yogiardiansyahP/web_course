@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
-    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.show');
+    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
     Route::post('/midtrans/webhook', [CheckoutController::class, 'handlePaymentCallback']);
 });
 
