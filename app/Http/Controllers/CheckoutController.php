@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -20,6 +21,14 @@ class CheckoutController extends Controller
 
     public function getSnapToken(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if (!$request->has('hargaAwal') || !is_numeric($request->hargaAwal)) {
+            return response()->json(['error' => 'Invalid hargaAwal'], 422);
+        }
+
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN);
         Config::$isSanitized = true;
@@ -32,9 +41,11 @@ class CheckoutController extends Controller
             $hargaDiskon = 395000;
         }
 
+        $orderId = 'ORDER-' . uniqid();
+
         $params = [
             'transaction_details' => [
-                'order_id' => 'ORDER-' . uniqid(),
+                'order_id' => $orderId,
                 'gross_amount' => $hargaDiskon,
             ],
             'customer_details' => [
@@ -45,11 +56,90 @@ class CheckoutController extends Controller
 
         try {
             $token = Snap::getSnapToken($params);
-            return response()->json(['token' => $token, 'hargaDiskon' => $hargaDiskon, 'hargaAwal' => $hargaAwal]);
+
+            return response()->json([
+                'token' => $token,
+                'order_id' => $orderId,
+                'hargaDiskon' => $hargaDiskon,
+                'hargaAwal' => $hargaAwal,
+                'status' => 'waiting_payment',
+                'payment_method' => null,
+                'payment_status' => null,
+            ]);
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
             return response()->json(['error' => 'Gagal mendapatkan token'], 500);
         }
+    }
+
+    public function saveTransaction(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    
+        $validated = $request->validate([
+            'order_id' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'hargaAwal' => 'required|numeric',
+            'hargaDiskon' => 'required|numeric',
+            'voucher' => 'nullable|string',
+            'status' => 'required|string|in:waiting_payment,completed,pending,failed,unknown',
+        ]);
+    
+        try {
+            $transaction = new Transaction();
+            $transaction->order_id = $validated['order_id'];
+            $transaction->user_id = $validated['user_id'];
+            $transaction->harga_awal = $validated['hargaAwal'];
+            $transaction->harga_diskon = $validated['hargaDiskon'];
+            $transaction->voucher = $validated['voucher'];
+            $transaction->status = $validated['status'];
+            $transaction->save();
+    
+            return response()->json(['message' => 'Transaction saved successfully']);
+        } catch (\Exception $e) {
+            Log::error('Error saving transaction: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to save transaction'], 500);
+        }
+    }
+    
+
+    public function midtransCallback(Request $request)
+    {
+        $payload = $request->getContent();
+        $signatureKey = $request->header('x-signature-key');
+        $serverKey = env('MIDTRANS_SERVER_KEY');
+
+        $json = json_decode($payload, true);
+        $expectedSignature = hash('sha512', $json['order_id'].$json['status_code'].$json['gross_amount'].$serverKey);
+
+        if ($signatureKey !== $expectedSignature) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+
+        $transaction = Transaction::where('order_id', $json['order_id'])->first();
+
+        if ($transaction) {
+            $transaction->status = match ($json['transaction_status']) {
+                'capture', 'settlement' => 'completed',
+                'pending' => 'pending',
+                'deny', 'cancel', 'expire', 'failure' => 'failed',
+                default => 'unknown',
+            };
+
+            $transaction->payment_method = $json['payment_type'] ?? null;
+            $transaction->payment_status = $json['transaction_status'] ?? null;
+            $transaction->save();
+        }
+
+        return response()->json(['message' => 'Notification received'], 200);
+    }
+
+    public function showTransactions()
+    {
+        $transactions = Transaction::where('user_id', Auth::id())->get();
+        return view('transaksi', compact('transactions'));
     }
 
     public function handlePaymentCallback(Request $request)
@@ -60,14 +150,14 @@ class CheckoutController extends Controller
         $transaction = Transaction::where('order_id', $transactionId)->first();
 
         if ($transaction) {
-            if ($status == 'success') {
-                $transaction->status = 'Pembayaran Berhasil';
-            } elseif ($status == 'pending') {
-                $transaction->status = 'Pembayaran Pending';
-            } else {
-                $transaction->status = 'Pembayaran Gagal';
-            }
+            $transaction->status = match ($status) {
+                'capture', 'settlement' => 'completed',
+                'pending' => 'pending',
+                'deny', 'cancel', 'expire', 'failure' => 'failed',
+                default => 'unknown',
+            };
 
+            $transaction->payment_status = $status;
             $transaction->save();
         }
 

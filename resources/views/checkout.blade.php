@@ -76,6 +76,8 @@
     </main>
 
     <script>
+        let finalHargaDiskon = {{ $course->price }};
+
         function formatRupiah(angka) {
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
@@ -91,18 +93,20 @@
                 potongan = hargaAwal - hargaDiskon;
             }
 
+            finalHargaDiskon = hargaDiskon;
+
             document.getElementById('diskon').innerText = '- ' + formatRupiah(potongan);
             document.getElementById('totalBayar').innerText = formatRupiah(hargaDiskon);
             document.getElementById('subTotal').innerText = formatRupiah(hargaDiskon);
         }
 
         function payNow() {
-            const hargaDiskon = document.getElementById('totalBayar').innerText.replace('Rp ', '').replace('.', '');
+            const voucher = document.getElementById('voucherInput').value.trim();
 
             fetch('/get-snap-token', {
                 method: 'POST',
                 body: JSON.stringify({
-                    voucher: document.getElementById('voucherInput').value.trim(),
+                    voucher: voucher,
                     hargaAwal: {{ $course->price }},
                 }),
                 headers: {
@@ -113,11 +117,35 @@
             .then(res => res.json())
             .then(data => {
                 if (data.token) {
-                    snap.pay(data.token, {
-                        onSuccess: () => window.location.href = '/transaksi',
-                        onPending: () => window.location.href = '/transaksi',
-                        onError: () => alert('Pembayaran gagal'),
-                        onClose: () => alert('Pembayaran dibatalkan'),
+                    fetch('/save-transaction', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            order_id: data.order_id,
+                            user_id: {{ Auth::id() }},
+                            hargaAwal: {{ $course->price }},
+                            hargaDiskon: finalHargaDiskon,
+                            voucher: voucher,
+                            status: 'pending', // status sementara, akan disesuaikan setelah callback
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        },
+                    }).then(() => {
+                        snap.pay(data.token, {
+                            onSuccess: function(result) {
+                                handleMidtransStatus(result.transaction_status);
+                            },
+                            onPending: function(result) {
+                                handleMidtransStatus(result.transaction_status);
+                            },
+                            onError: function() {
+                                alert('Pembayaran gagal');
+                            },
+                            onClose: function() {
+                                alert('Pembayaran dibatalkan');
+                            }
+                        });
                     });
                 } else {
                     alert('Gagal memproses pembayaran');
@@ -125,6 +153,23 @@
             })
             .catch(() => alert('Gagal memproses pembayaran'));
         }
+
+        function handleMidtransStatus(status) {
+            const statusMapping = {
+                'capture': 'completed',
+                'settlement': 'completed',
+                'pending': 'pending',
+                'deny': 'failed',
+                'cancel': 'failed',
+                'expire': 'failed',
+                'failure': 'failed',
+                'unknown': 'unknown',
+            };
+
+            const mappedStatus = statusMapping[status] || 'unknown';
+            window.location.href = '/transaksi/' + mappedStatus;
+        }
+
     </script>
 </body>
 </html>

@@ -10,14 +10,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_id')->unique();
-            $table->string('course_name');
-            $table->decimal('price', 10, 2);
-            $table->decimal('discount', 10, 2)->nullable();
-            $table->dateTime('transaction_date');
-            $table->string('status')->default('pending');
+            $table->unsignedBigInteger('user_id');
+            $table->decimal('harga_awal', 10, 2);
+            $table->decimal('harga_diskon', 10, 2);
+            $table->string('voucher')->nullable();
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('payment_method')->nullable();
+            $table->string('payment_status')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

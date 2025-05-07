@@ -32,16 +32,24 @@ Route::get('/home', function () {
 })->name('kembali');
 
 Route::middleware('auth')->group(function () {
+    // User-related routes
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
+    Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
+    Route::post('/save-transaction', [CheckoutController::class, 'saveTransaction']);
+    Route::post('/midtrans-callback', [CheckoutController::class, 'midtransCallback']);
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
-    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi');
+    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
+    Route::get('/transaksi/{status}', [TransactionController::class, 'showStatus'])->name('transaksi.status');
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
     Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
     Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');
+    
+    // Admin-related routes
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
     Route::get('/datauser', [AdminController::class, 'showUser'])->name('datauser');
     Route::get('/datatransaksi', [AdminController::class, 'showTransaksi'])->name('datatransaksi');
@@ -51,6 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    
+    // Transaction and payment-related routes
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
     Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
     Route::post('/midtrans/webhook', [CheckoutController::class, 'handlePaymentCallback']);

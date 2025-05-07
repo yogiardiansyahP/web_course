@@ -2,19 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    protected $table = 'transactions';
 
     protected $fillable = [
-        'order_id',
-        'user_id',
-        'course_id',
-        'amount',
-        'status'
+        'order_id', 'user_id', 'course_name', 'price', 'status', 'payment_method'
     ];
 
     public function user()
