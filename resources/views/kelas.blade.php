@@ -23,46 +23,12 @@
         <div>
             <h2>{{ $course->name }}</h2>
             <p>{{ $course->materials->count() }} Pelajaran</p>
-            <a href="{{ route('kelas', $course->id) }}" class="view-detail">Lihat Detail</a>
+            <a href="{{ route('checkout', ['courseId' => $course->id]) }}" class="view-detail"> Rp.{{ number_format($course->price, 0, ',', '.') }} </a>
         </div>
     </div>
 @endforeach
 
     </div>
-    
-  
   </div>
-  
-
-  <script>
-    const userLoggedIn = @json(auth()->check());
-
-    function checkLogin(classType) {
-      if (userLoggedIn) {
-        window.location.href = "/kelas/" + classType;
-      } else {
-        Swal.fire({
-          title: 'Anda belum login!',
-          text: 'Silakan login terlebih dahulu untuk mengakses detail kelas.',
-          icon: 'warning',
-          confirmButtonText: 'Login',
-          showCancelButton: true,
-          cancelButtonText: 'Batal',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "{{ route('login') }}";
-          }
-        });
-      }
-    }
-
-    document.querySelectorAll('.view-detail').forEach(detailDiv => {
-      detailDiv.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-        const classType = this.closest('.card').getAttribute('data-class');
-        checkLogin(classType);
-      });
-    });
-  </script>
 </body>
 </html>

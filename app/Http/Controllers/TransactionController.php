@@ -14,26 +14,26 @@ class TransactionController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $transactions = Transaction::where('user_id', $userId)->get();
+        $transactions = Transaction::where('user_id', $userId)->with('course')->get();
         return view('transaksi', compact('transactions'));
     }
 
     public function showStatus($status)
-{
-    $transaction = Transaction::where('status', $status)->first();
+    {
+        $transaction = Transaction::where('status', $status)->first();
 
-    if (!$transaction) {
-        abort(404, 'Transaction not found');
+        if (!$transaction) {
+            abort(404, 'Transaction not found');
+        }
+
+        return view('transaksi.status', compact('transaction'));
     }
-
-    return view('transaksi.status', compact('transaction'));
-}
-
 
     public function show($id)
     {
         $transaction = Transaction::where('id', $id)
             ->where('user_id', Auth::id())
+            ->with('course')
             ->firstOrFail();
 
         Config::$serverKey = config('services.midtrans.server_key');
@@ -46,7 +46,6 @@ class TransactionController extends Controller
                 MidtransTransaction::status($transaction->order_id)
             ));
 
-            // Sesuaikan status transaksi sesuai dengan status dari Midtrans
             $transaction->status = match ($status->transaction_status ?? '') {
                 'capture', 'settlement' => 'completed',
                 'pending' => 'pending',
@@ -112,14 +111,22 @@ class TransactionController extends Controller
             'message' => 'Transaction deleted successfully',
         ]);
     }
+
     public function apiIndex(Request $request)
     {
         $userId = $request->user()->id;
-        $transactions = Transaction::where('user_id', $userId)->get();
+        $transactions = Transaction::where('user_id', $userId)->with('course')->get();
 
         return response()->json([
             'success' => true,
-            'data' => $transactions
+            'data' => $transactions->map(function ($t) {
+                return [
+                    'order_id' => $t->order_id,
+                    'status' => $t->status,
+                    'course_name' => $t->course->title ?? null,
+                    'amount' => $t->amount,
+                ];
+            }),
         ]);
     }
 }

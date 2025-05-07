@@ -43,31 +43,33 @@
   <h1>Transaksi</h1>
 
   <div class="transaction-card">
-    <p><strong>Username:</strong> {{ Auth::user()->username }}</p>
+    <p><strong>Username: {{ Auth::user()->name }}</strong></p>
 
     <table>
-      <thead>
+    <thead>
+      <tr>
+        <th>ID Transaksi</th>
+        <th>Nama Course</th>
+        <th>Total Pembayaran</th>
+        <th>Tanggal Transaksi</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      @forelse ($transactions as $transaction)
         <tr>
-          <th>ID Transaksi</th>
-          <th>Total Pembayaran</th>
-          <th>Tanggal Transaksi</th>
-          <th>Email</th>
+          <td>{{ $transaction->order_id }}</td>
+          <td>{{ $transaction->course_name ?? '-' }}</td>
+          <td>Rp {{ number_format($transaction->harga_diskon, 0, ',', '.') }}</td>
+          <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
+          <td>{{ Auth::user()->email }}</td>
         </tr>
-      </thead>
-      <tbody>
-        @forelse ($transactions as $transaction)
-          <tr>
-            <td>{{ $transaction->order_id }}</td>
-            <td>Rp {{ number_format($transaction->harga_diskon, 0, ',', '.') }}</td>
-            <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
-            <td>{{ Auth::user()->email }}</td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="4" class="no-data">Tidak ada transaksi</td>
-          </tr>
-        @endforelse
-      </tbody>
+      @empty
+        <tr>
+          <td colspan="5" class="no-data">Tidak ada transaksi</td>
+        </tr>
+      @endforelse
+    </tbody>
     </table>
 
     <div class="limit-control">

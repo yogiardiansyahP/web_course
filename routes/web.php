@@ -34,6 +34,7 @@ Route::get('/home', function () {
 Route::middleware('auth')->group(function () {
     // User-related routes
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
+    Route::get('/kelas', [CourseController::class, 'showKelas'])->name('kelas');
     Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
     Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
