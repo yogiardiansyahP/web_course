@@ -1,18 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\Api\AuthController;
 
-// Authentication Routes
-Route::get('/register', [AuthController::class, 'apiRegister'])->name('api.register');
-Route::get('/login', [AuthController::class, 'apiLogin'])->name('api.login');
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'apiLogout'])->name('api.logout');
+Route::post('/register', [AuthController::class, 'register'])->name('api.register');
+Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout'])->name('api.logout');
 
-// API Resources
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/courses', CourseController::class);
     Route::apiResource('/transactions', TransactionController::class);
@@ -23,4 +21,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
+    Route::get('/transactions', [TransactionController::class, 'apiIndex']);
 });

@@ -10,8 +10,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    // Login untuk API version
-    public function login(Request $request)
+    public function apiLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -31,8 +30,7 @@ class AuthController extends Controller
         ], 401);
     }
 
-    // Register untuk API version
-    public function register(Request $request)
+    public function apiRegister(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -54,8 +52,7 @@ class AuthController extends Controller
         ]);
     }
 
-    // Logout untuk API version
-    public function logout(Request $request)
+    public function apiLogout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 

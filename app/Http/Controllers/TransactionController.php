@@ -112,4 +112,14 @@ class TransactionController extends Controller
             'message' => 'Transaction deleted successfully',
         ]);
     }
+    public function apiIndex(Request $request)
+    {
+        $userId = $request->user()->id;
+        $transactions = Transaction::where('user_id', $userId)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $transactions
+        ]);
+    }
 }

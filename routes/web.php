@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     // User-related routes
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
     Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
+    Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
@@ -75,7 +76,7 @@ Route::get('/kontak', function () {
 })->name('kontak');
 
 Route::get('/datauser', [AdminController::class, 'dataUser'])->name('datauser');
-Route::get('/kelas', [CourseController::class, 'showCourses'])->name('kelas');
+Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('kelas');
 
 // API Routes
 Route::prefix('api')->group(function () {

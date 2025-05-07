@@ -27,9 +27,9 @@ fake_async
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.2/
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.2/lib/
 flutter_lints
-3.5
-file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-5.0.0/
-file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-5.0.0/lib/
+2.19
+file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.3/
+file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.3/lib/
 leak_tracker
 3.2
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-10.0.8/
@@ -43,9 +43,9 @@ leak_tracker_testing
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.1/
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.1/lib/
 lints
-3.6
-file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/lints-5.1.1/
-file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/lints-5.1.1/lib/
+3.0
+file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1/
+file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.1.1/lib/
 matcher
 3.4
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.17/
@@ -95,7 +95,7 @@ vm_service
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.3.1/
 file:///C:/Users/laven/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.3.1/lib/
 project_akhir
-3.7
+3.0
 file:///C:/Users/laven/Documents/Tugas%20Kuliah/web_course/
 file:///C:/Users/laven/Documents/Tugas%20Kuliah/web_course/lib/
 sky_engine
