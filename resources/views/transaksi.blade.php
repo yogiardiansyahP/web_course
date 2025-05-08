@@ -45,43 +45,84 @@
   <div class="transaction-card">
     <p><strong>Username: {{ Auth::user()->name }}</strong></p>
 
+    <div class="filter-bar">
+      <form method="GET" action="{{ route('transaksi') }}" class="filter-form">
+        <input type="text" name="search" placeholder="Cari nama course..." value="{{ request('search') }}" class="search-input" />
+        
+        <select name="limit" class="limit-select" onchange="this.form.submit()">
+          <option value="4" {{ request('limit') == 4 ? 'selected' : '' }}>4</option>
+          <option value="8" {{ request('limit') == 8 ? 'selected' : '' }}>8</option>
+          <option value="12" {{ request('limit') == 12 ? 'selected' : '' }}>12</option>
+        </select>
+      </form>
+    </div>
+
     <table>
-    <thead>
-      <tr>
-        <th>ID Transaksi</th>
-        <th>Nama Course</th>
-        <th>Total Pembayaran</th>
-        <th>Tanggal Transaksi</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse ($transactions as $transaction)
+      <thead>
         <tr>
-          <td>{{ $transaction->order_id }}</td>
-          <td>{{ $transaction->course_name ?? '-' }}</td>
-          <td>Rp {{ number_format($transaction->harga_diskon, 0, ',', '.') }}</td>
-          <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
-          <td>{{ Auth::user()->email }}</td>
+          <th>ID Transaksi</th>
+          <th>Nama Course</th>
+          <th>Total Pembayaran</th>
+          <th>Tanggal Transaksi</th>
+          <th>Email</th>
         </tr>
-      @empty
-        <tr>
-          <td colspan="5" class="no-data">Tidak ada transaksi</td>
-        </tr>
-      @endforelse
-    </tbody>
+      </thead>
+      <tbody>
+        @forelse ($transactions as $transaction)
+          <tr>
+            <td>{{ $transaction->order_id }}</td>
+            <td>{{ $transaction->course_name ?? '-' }}</td>
+            <td>Rp {{ number_format($transaction->harga_diskon, 0, ',', '.') }}</td>
+            <td>{{ $transaction->created_at->format('d-m-Y H:i:s') }}</td>
+            <td>{{ Auth::user()->email }}</td>
+          </tr>
+        @empty
+          <tr>
+            <td colspan="5" class="no-data">Tidak ada transaksi</td>
+          </tr>
+        @endforelse
+      </tbody>
     </table>
 
-    <div class="limit-control">
-      <label for="limit">Limit:</label>
-      <select id="limit" name="limit">
-        <option value="4">4</option>
-        <option value="8">8</option>
-        <option value="12">12</option>
-      </select>
+    <div class="pagination">
+      {{ $transactions->appends(request()->query())->links() }}
     </div>
+
   </div>
 </main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector('.search-input');
+    
+    searchInput.addEventListener('input', function() {
+      const query = searchInput.value.toLowerCase();
+      const rows = document.querySelectorAll('table tbody tr');
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const idTransaksi = cells[0].textContent.toLowerCase();
+        const courseName = cells[1].textContent.toLowerCase();
+        const totalPembayaran = cells[2].textContent.toLowerCase();
+        const tanggalTransaksi = cells[3].textContent.toLowerCase();
+        const email = cells[4].textContent.toLowerCase();
+
+        if (
+          idTransaksi.includes(query) ||
+          courseName.includes(query) ||
+          totalPembayaran.includes(query) ||
+          tanggalTransaksi.includes(query) ||
+          email.includes(query)
+        ) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>

@@ -11,23 +11,23 @@ use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
-        $transactions = Transaction::where('user_id', $userId)->with('course')->get();
+        $limit = $request->input('limit', 4);
+        $search = $request->input('search');
+    
+        $transactions = Transaction::with('course')
+            ->where('user_id', $userId)
+            ->when($search, function ($query, $search) {
+                $query->whereHas('course', function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%');
+                });
+            })
+            ->paginate($limit);
+    
         return view('transaksi', compact('transactions'));
-    }
-
-    public function showStatus($status)
-    {
-        $transaction = Transaction::where('status', $status)->first();
-
-        if (!$transaction) {
-            abort(404, 'Transaction not found');
-        }
-
-        return view('transaksi.status', compact('transaction'));
-    }
+    }    
 
     public function show($id)
     {

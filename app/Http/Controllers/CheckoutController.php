@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
-    public function showCheckout($courseId)
+    public function checkoutPage($courseId)
     {
         $course = Course::findOrFail($courseId);
         return view('checkout', compact('course'));
@@ -23,27 +23,27 @@ class CheckoutController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-    
+
         if (!$request->has('hargaAwal') || !is_numeric($request->hargaAwal)) {
             return response()->json(['error' => 'Invalid hargaAwal'], 422);
         }
-    
+
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN);
         Config::$isSanitized = true;
         Config::$is3ds = true;
-    
+
         $hargaAwal = $request->hargaAwal;
         $hargaDiskon = $hargaAwal;
-    
+
         if ($request->voucher === 'CODEINCOURSEIDNBGR') {
             $hargaDiskon = 395000;
         }
-    
+
         $orderId = 'ORDER-' . uniqid();
         $courseName = $request->course_name;
         $userEmail = Auth::user()->email;
-    
+
         $params = [
             'transaction_details' => [
                 'order_id' => $orderId,
@@ -64,11 +64,11 @@ class CheckoutController extends Controller
                     'currency' => 'IDR',
                 ]
             ]
-        ];        
-    
+        ];
+
         try {
             $token = Snap::getSnapToken($params);
-    
+
             return response()->json([
                 'token' => $token,
                 'order_id' => $orderId,
@@ -85,7 +85,7 @@ class CheckoutController extends Controller
             return response()->json(['error' => 'Gagal mendapatkan token'], 500);
         }
     }
-    
+
     public function saveTransaction(Request $request)
     {
         $transaction = new Transaction();
@@ -97,7 +97,7 @@ class CheckoutController extends Controller
         $transaction->course_name = $request->course_name;
         $transaction->status = $request->status;
         $transaction->save();
-    
+
         return response()->json(['message' => 'Transaction saved successfully.']);
     }
 
@@ -141,7 +141,7 @@ class CheckoutController extends Controller
     public function showTransactions()
     {
         $transactions = Transaction::where('user_id', Auth::id())->get();
-        return view('transaksi', compact('transactions'));
+        return response()->json(['transactions' => $transactions]);
     }
 
     public function handlePaymentCallback(Request $request)
@@ -163,6 +163,6 @@ class CheckoutController extends Controller
             $transaction->save();
         }
 
-        return redirect()->route('transaksi.detail', ['transaction' => $transaction->id])->with('status', $status);
+        return response()->json(['message' => 'Payment status updated successfully']);
     }
 }

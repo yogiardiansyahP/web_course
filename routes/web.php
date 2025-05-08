@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{courseId}', [CheckoutController::class, 'checkoutPage'])->name('checkout.page');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::post('/save-transaction', [CheckoutController::class, 'saveTransaction']);
     Route::post('/midtrans-callback', [CheckoutController::class, 'midtransCallback']);
@@ -84,9 +85,24 @@ Route::prefix('api')->group(function () {
     Route::post('/login', [AuthController::class, 'apiLogin'])->name('api.login');
     Route::post('/register', [AuthController::class, 'apiRegister'])->name('api.register');
     Route::post('/logout', [AuthController::class, 'apiLogout'])->middleware('auth:sanctum')->name('api.logout');
-    Route::apiResource('/courses', CourseController::class);
-    Route::apiResource('/transactions', TransactionController::class);
-    Route::apiResource('/certificates', CertificateController::class);
-    Route::put('/settings/profile', [SettingController::class, 'apiUpdateProfile'])->middleware('auth:sanctum')->name('api.settings.updateProfile');
-    Route::put('/settings/password', [SettingController::class, 'apiUpdatePassword'])->middleware('auth:sanctum')->name('api.settings.updatePassword');
+    
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('api.checkout.showCheckout');
+        Route::post('/checkout/token', [CheckoutController::class, 'getSnapToken'])->name('api.checkout.getSnapToken');
+        Route::post('/checkout/save', [CheckoutController::class, 'saveTransaction'])->name('api.checkout.saveTransaction');
+        Route::post('/checkout/callback', [CheckoutController::class, 'midtransCallback'])->name('api.checkout.midtransCallback');
+        Route::post('/checkout/payment-callback', [CheckoutController::class, 'handlePaymentCallback'])->name('api.checkout.handlePaymentCallback');
+        
+        Route::apiResource('/courses', CourseController::class);
+        Route::apiResource('/transactions', TransactionController::class);
+        Route::apiResource('/certificates', CertificateController::class);
+        
+        Route::put('/settings/profile', [SettingController::class, 'apiUpdateProfile'])->name('api.settings.updateProfile');
+        Route::put('/settings/password', [SettingController::class, 'apiUpdatePassword'])->name('api.settings.updatePassword');
+        
+        Route::post('/transactions', [TransactionController::class, 'store']);
+        Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+        Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
+        Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
+    });
 });
