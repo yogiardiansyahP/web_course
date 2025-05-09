@@ -17,16 +17,19 @@
     <p class="subtitle">Jelajahi berbagai pilihan kelas dan tingkatkan keterampilan anda</p>
 
     <div class="grid">
-      @foreach ($courses as $course)
-    <div class="card" data-class="php-dasar">
-        <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
-        <div>
-            <h2>{{ $course->name }}</h2>
-            <p>{{ $course->materials->count() }} Pelajaran</p>
-            <a href="{{ route('kelas', $course->id) }}" class="view-detail">Lihat Detail</a>
+     @foreach ($courses as $course)
+    <a href="{{ route('checkout', $course->id) }}" style="text-decoration: none; color: inherit;">
+        <div class="card" data-class="php-dasar">
+            <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
+            <div>
+                <h2>{{ $course->name }}</h2>
+                <p>{{ $course->materials->count() }} Pelajaran</p>
+                <td>Rp {{ number_format($course->price, 0, ',', '.') }}</td>
+            </div>
         </div>
-    </div>
+    </a>
 @endforeach
+
 
     </div>
     

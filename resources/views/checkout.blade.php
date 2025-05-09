@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <a href="{{ route('home') }}">
-            <img src="{{ asset('asset/logo-placeholder.png') }}" alt="Logo" class="logo">
+            <img src="{{ asset('asset/logo.png') }}" alt="Logo" class="logo">
         </a>
     </header>
 
@@ -26,8 +26,8 @@
             <div class="account-card">
                 <h2>Informasi Akun</h2>
                 <div class="account-info">
-                    <img src="{{ asset('asset/avatar-placeholder.png') }}" alt="Avatar" class="avatar">
-                    <div>
+                    
+                    <div style="margin-left:0px;">
                         <p class="account-name">{{ Auth::user()->name }}</p>
                         <p class="account-email">{{ Auth::user()->email }}</p>
                     </div>
@@ -43,7 +43,8 @@
             </div>
 
             <div class="course-card">
-                <img src="{{ asset('storage/' . $course->thumbnail ?? 'asset/course-image-placeholder.png') }}" alt="Course">
+                <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : asset('images/placeholder.png') }}" alt="Course Image" class="course-thumbnail">
+
                 <div class="course-info">
                     <p class="course-title">{{ $course->name }}</p>
                     <a href="{{ route('kelas') }}">Lihat Detail Kelas</a>

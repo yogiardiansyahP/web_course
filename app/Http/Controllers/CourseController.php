@@ -120,6 +120,7 @@ class CourseController extends Controller
         $course->delete();
 
         return redirect()->route('courses.index')->with('success', 'Course berhasil dihapus.');
+
     }
 
     public function showCourses()
@@ -130,7 +131,7 @@ class CourseController extends Controller
     public function showData()
 {
     $courses = Course::with('materials')->get();
-    return view('daftarcourse', compact('courses'));
+    return view('daftarcourse', compact('courses')); // Fix: use $courses, not $course
 }
 
 

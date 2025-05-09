@@ -188,12 +188,15 @@
 </head>
 <body>
   <aside class="sidebar">
-    <a href="dashboard.html" style="font-size: 18px; color: #3B82F6; text-decoration: none; margin-bottom: 20px;">
+    <a href="{{ route('dashboard') }}" style="color: #3B82F6;  margin-bottom: 20px;">
         ←
       </a>
-    <a href="#"><span>{{ asset('asset/kursus.png') }}</span> Kursus Saya</a>
-    <a href="#"><span>{{ asset('asset/tersedia.png') }}</span> Kelas Yang Tersedia</a>
-    <a href="#" class="logout"><span>{{ asset('asset/logout.png') }}</span> Keluar</a>
+    <a href="{{ route('daftarcourse') }}"><img src="{{ asset('asset/kursus.png') }}" alt="Kursus" width="20" />
+ Kursus Saya</a>
+    <a href="{{route('kelas')}}"><img src="{{ asset('asset/tersedia.png') }}" alt="Kursus" width="20" />
+ Kelas Yang Tersedia</a>
+    <a href="#" class="logout"><img src="{{ asset('asset/logout.png') }}" alt="Kursus" width="20" />
+ Keluar</a>
   </aside>
 
   <main class="main">

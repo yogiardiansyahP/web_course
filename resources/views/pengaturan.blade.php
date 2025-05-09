@@ -17,7 +17,7 @@
         <nav>
         <ul>
         <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
-        <a href="{{ route('kelas') }}" class="menu-item">Course</a>
+        <a href="{{ route('daftarcourse') }}" class="menu-item">Course</a>
         <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
         <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
         <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
