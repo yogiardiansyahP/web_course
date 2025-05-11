@@ -2,72 +2,58 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\CourseController;
 
-// ===========================
-// Public Routes
-// ===========================
+// Web Routes
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
 
-Route::get('/', fn () => view('welcome'))->name('home');
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
 
-// Auth Pages
-Route::get('/login', fn () => view('login'))->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
 
-Route::get('/register', fn () => view('register'))->name('register.form');
-
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Static pages
-Route::get('/tentang', fn () => view('tentang_kami'))->name('tentang');
-Route::get('/kontak', fn () => view('kontak'))->name('kontak');
-
-// Public course list
-Route::get('/kelas', [CourseController::class, 'showCourses'])->name('kelas');
-
-// ===========================
-// Authenticated Routes
-// ===========================
+Route::get('/home', function () {
+    return view('welcome');
+})->name('kembali');
 
 Route::middleware('auth')->group(function () {
-    // Dashboard
+    // User-related routes
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
-
-    // Courses
-    Route::get('/daftarcourse', [CourseController::class, 'showData'])->name('daftarcourse');
-    Route::get('/materi-user', [CourseController::class, 'showUserCourse'])->name('materi.user');
-
-    // Checkout
+    Route::get('/kelas', [CourseController::class, 'showKelas'])->name('kelas');
+    Route::get('/materi/{course}', [CourseController::class, 'showMaterials'])->name('materi');
+    Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
+    Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::get('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'checkoutPage'])->name('checkout');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::post('/save-transaction', [CheckoutController::class, 'saveTransaction']);
     Route::post('/midtrans-callback', [CheckoutController::class, 'midtransCallback']);
-
-    // Transactions
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
     Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
-    Route::get('/transaksi/status/{status}', [TransactionController::class, 'showStatus'])->name('transaksi.status');
-
-    // Certificates
+    Route::get('/transaksi/{status}', [TransactionController::class, 'showStatus'])->name('transaksi.status');
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
-
-    // Settings
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
     Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
     Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');
-
-    // Admin Routes
+    
+    // Admin-related routes
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
     Route::get('/datauser', [AdminController::class, 'showUser'])->name('datauser');
     Route::get('/datatransaksi', [AdminController::class, 'showTransaksi'])->name('datatransaksi');
@@ -115,9 +101,11 @@ Route::prefix('api')->group(function () {
         Route::put('/settings/profile', [SettingController::class, 'apiUpdateProfile'])->name('api.settings.updateProfile');
         Route::put('/settings/password', [SettingController::class, 'apiUpdatePassword'])->name('api.settings.updatePassword');
         
-        Route::post('/transactions', [TransactionController::class, 'store']);
+        // Add the new POST endpoint for creating transactions
+        Route::post('/transactions', [TransactionController::class, 'apiStore'])->name('api.transactions.store');
         Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
         Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
         Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
+        Route::post('/api-datacourse', [AdminController::class, 'apiDataCourse']);
     });
 });

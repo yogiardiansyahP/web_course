@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -135,39 +136,30 @@ class CourseController extends Controller
         $courses = Course::with('materials')->get();
         return view('daftarcourse', compact('courses'));
     }
-<<<<<<< HEAD
-
-    public function showMateri($id)
-{
-   
-    $course = Course::findOrFail($id);
-
-    // Return the view and pass the course data to it
-    return view('materi', compact('course'));
-}
-
-    public function show($id)
-    {
-        $course = Course::with('materials')->findOrFail($id);
-        return view('courses.show', compact('course'));
-    }
-=======
->>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
 
     public function showUserCourse()
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        $userId = Auth::id(); // This retrieves the ID of the authenticated user.
+    
+        if (!$userId) {
+            return redirect()->route('login')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
         }
-
-        $course = $user->enrolledCourses()->with('materials')->first();
-
+    
+        $course = Course::whereHas('enrolledUsers', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->with('materials')->first();
+    
         if (!$course) {
             return redirect()->route('kelas')->with('warning', 'Kamu belum terdaftar di kursus manapun.');
         }
-
+    
         return view('materi', compact('course'));
     }
+    
+    public function showMaterials(Course $course)
+    {
+        $materials = $course->materials;
+        return view('showMaterials', compact('course', 'materials'));
+    }
+    
 }
