@@ -65,7 +65,6 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -77,26 +76,23 @@ class CourseController extends Controller
             'materials.*.video' => 'nullable|url',
         ]);
 
-        // Menyimpan Thumbnail (jika ada)
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails');
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
 
-        // Update data course
         $course->update($validated);
 
-        // Update atau tambahkan materi
         if ($request->has('materials')) {
-            foreach ($request->materials as $index => $materialData) {
+            foreach ($request->materials as $materialData) {
                 if (isset($materialData['id'])) {
-                    // Update materi yang sudah ada
                     $material = Material::find($materialData['id']);
-                    $material->update([
-                        'title' => $materialData['title'],
-                        'video_url' => $materialData['video'],
-                    ]);
+                    if ($material) {
+                        $material->update([
+                            'title' => $materialData['title'],
+                            'video_url' => $materialData['video'],
+                        ]);
+                    }
                 } else {
-                    // Tambah materi baru
                     Material::create([
                         'course_id' => $course->id,
                         'title' => $materialData['title'],
@@ -106,13 +102,13 @@ class CourseController extends Controller
             }
         }
 
-        return redirect()->route('courses.index')->with('success', 'Course updated successfully');
+        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
     }
-    
 
     public function destroy(Course $course)
     {
         $course->materials()->delete();
+
         if ($course->thumbnail && Storage::exists('public/' . $course->thumbnail)) {
             Storage::delete('public/' . $course->thumbnail);
         }
@@ -139,5 +135,39 @@ class CourseController extends Controller
         $courses = Course::with('materials')->get();
         return view('daftarcourse', compact('courses'));
     }
+<<<<<<< HEAD
 
+    public function showMateri($id)
+{
+   
+    $course = Course::findOrFail($id);
+
+    // Return the view and pass the course data to it
+    return view('materi', compact('course'));
+}
+
+    public function show($id)
+    {
+        $course = Course::with('materials')->findOrFail($id);
+        return view('courses.show', compact('course'));
+    }
+=======
+>>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
+
+    public function showUserCourse()
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $course = $user->enrolledCourses()->with('materials')->first();
+
+        if (!$course) {
+            return redirect()->route('kelas')->with('warning', 'Kamu belum terdaftar di kursus manapun.');
+        }
+
+        return view('materi', compact('course'));
+    }
 }

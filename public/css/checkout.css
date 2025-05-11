@@ -1,63 +1,76 @@
-* {
+/* Reset dan font */
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
+    background-color: #fafafa;
+    color: #333;
 }
 
-body {
-    background: #f1f5f9;
-    padding: 20px;
-}
-
+/* Header */
 .header {
-    text-align: center;
-    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #eee;
+    background: white;
 }
 
 .logo {
     width: 60px;
 }
 
-.checkout-container {
+/* Title */
+.checkout-title {
     text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
-.checkout-title {
-    font-size: 36px;
-    color: #2563eb;
-    font-weight: 700;
-    margin-bottom: 40px;
+/* Grid Layout */
+.checkout-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 50px;
 }
 
 .checkout-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
 }
 
-.account-card, .account-code-card, .course-card, .order-summary-card {
-    background: #ffffff;
+/* Card Style Base */
+.account-card,
+.account-code-card,
+.course-card,
+.order-summary-card {
+    background: #fff;
     border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     padding: 24px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
 }
 
-.account-card:hover, .account-code-card:hover, .course-card:hover, .order-summary-card:hover {
-    transform: translateY(-5px);
+/* Akun Info */
+.account-card h2,
+.account-code-card h2,
+.order-summary-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 .account-info {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-top: 12px;
 }
 
-.avatar {
+.account-info img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -65,105 +78,106 @@ body {
 }
 
 .account-name {
+    font-size: 1.1rem;
     font-weight: 600;
-    font-size: 16px;
 }
 
 .account-email {
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 0.9rem;
+    color: #777;
 }
 
+/* Voucher Input */
 .account-code-input {
     display: flex;
     gap: 10px;
-    margin-top: 16px;
 }
 
 .account-code-input input {
     flex: 1;
     padding: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
 }
 
 .account-code-input button {
-    background: #2563eb;
+    padding: 12px 24px;
+    background-color: #2563eb;
     color: white;
-    padding: 12px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 .account-code-input button:hover {
-    background: #1e40af;
+    background-color: #1e4fd3;
 }
 
+/* Course */
 .course-card img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
     border-radius: 12px;
-}
-
-.course-info {
-    margin-top: 12px;
-    text-align: left;
+    margin-bottom: 12px;
+    object-fit: cover;
+    max-height: 200px;
 }
 
 .course-title {
-    font-size: 18px;
+    font-size: 1rem;
     font-weight: 600;
+    margin-bottom: 8px;
 }
 
-.course-info a {
-    display: inline-block;
-    margin-top: 8px;
+.course-card a {
+    font-size: 0.9rem;
     color: #2563eb;
-    font-size: 14px;
+    text-decoration: none;
+}
+
+.course-card a:hover {
     text-decoration: underline;
 }
 
-.order-summary {
-    margin-top: 16px;
-}
-
-.item {
+/* Ringkasan Order */
+.order-summary .item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    font-size: 1rem;
 }
 
-.total {
-    font-weight: bold;
-    font-size: 16px;
-    color: #111827;
+.order-summary .item.total {
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-top: 1px solid #ddd;
+    padding-top: 12px;
 }
 
-.payment-method-link {
-    display: block;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #2563eb;
-    text-decoration: underline;
-}
-
+/* Tombol Checkout */
 .checkout-button {
     width: 100%;
-    background: #10b981;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #2563eb;
     color: white;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: bold;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-top: 20px;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
 .checkout-button:hover {
-    background: #059669;
+    background-color: #1e4fd3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr;
+    }
 }

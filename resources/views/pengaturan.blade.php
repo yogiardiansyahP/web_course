@@ -15,13 +15,13 @@
           <img src="{{ asset('asset/logo.png') }}" alt="Logo WPU Course" />
         </div>
         <nav>
-          <ul>
-            <li><a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a></li>
-            <li><a href="{{ route('kelas') }}" class="menu-item">Course</a></li>
-            <li><a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a></li>
-            <li><a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a></li>
-            <li><a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a></li>
-          </ul>
+        <ul>
+        <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
+        <a href="{{ route('daftarcourse') }}" class="menu-item">Course</a>
+        <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
+        <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
+        <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
+        </ul>
         </nav>
       </div>
       <div class="sidebar-footer">
