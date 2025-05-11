@@ -44,4 +44,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(ProgressBelajar::class);
     }
+
+    public function enrolledCourses()
+{
+    return $this->belongsToMany(Course::class, 'enrollments'); // jika kamu pakai tabel pivot 'enrollments'
+}
+
 }

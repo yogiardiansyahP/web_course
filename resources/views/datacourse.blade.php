@@ -76,24 +76,32 @@
                     <td><img src="{{ asset('storage/' . $course->thumbnail) }}" width="100"></td>
                     <td>{{ $course->description }}</td>
                     <td>
-                        <ul>
-                            @foreach ($course->materials as $material)
-                                <li>
-                                    <strong>{{ $material->title }}</strong><br>
-                                    <a href="{{ $material->video_url }}" target="_blank">{{ $material->video_url }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
+                        <table class="table table-sm table-bordered mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Judul</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($course->materials as $material)
+                                    <tr>
+                                        <td>{{ $material->title }}</td>
+                                        <td><a href="{{ $material->video_url }}" target="_blank">{{ $material->video_url }}</a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </td>
                     <td>{{ $course->mentor }}</td>
                     <td>Rp {{ number_format($course->price, 0, ',', '.') }}</td>
-
                     <td>{{ $course->status }}</td>
                     <td>
-                        <a href="{{ route('courses.edit', $course->id) }}" class="btn custom-btn">Edit</a> |
+                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-primary">Edit</a> |
                         <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn custom-btn danger" onclick="return confirm('Hapus course ini?')">Hapus</button>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus course ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
@@ -120,5 +128,4 @@
         container.appendChild(materiItem);
     }
 </script>
-
 @endsection

@@ -10,6 +10,23 @@
       box-sizing: border-box;
     }
 
+    .learn-button {
+    display: inline-block;
+    background-color: #346D9CFF; /* Hijau */
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.learn-button:hover {
+    background-color: #05345AFF;
+}
+
+
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -208,30 +225,19 @@
       <div class="tab">Kursus yang sudah selesai</div>
     </div>
     <div class="course-list">
-      <div class="course-item">
-        <img src="https://via.placeholder.com/100" alt="Course Image">
-        <div class="details">
-          <h3>Belajar JavaScript Dari Nol</h3>
-          <p>JavaScript adalah bahasa pemrograman yang digunakan developer untuk membuat halaman web yang interaktif.</p>
-        </div>
-        <button>Lanjutkan Belajar</button>
+      
       </div>
-      <div class="course-item">
-        <img src="https://via.placeholder.com/100" alt="Course Image">
-        <div class="details">
-          <h3>Belajar JavaScript Dari Nol</h3>
-          <p>JavaScript adalah bahasa pemrograman yang digunakan developer untuk membuat halaman web yang interaktif.</p>
-        </div>
-        <button>Lanjutkan Belajar</button>
-      </div>
-      <div class="course-item">
-        <img src="https://via.placeholder.com/100" alt="Course Image">
-        <div class="details">
-          <h3>Belajar JavaScript Dari Nol</h3>
-          <p>JavaScript adalah bahasa pemrograman yang digunakan developer untuk membuat halaman web yang interaktif.</p>
-        </div>
-        <button>Lanjutkan Belajar</button>
-      </div>
+      @foreach ($courses as $course)
+  <div class="course-item">
+    <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="Course Image">
+    <div class="details">
+      <h3>{{ $course->name }}</h3>
+      <p>{{ $course->description }}</p>
+    </div>
+    <a href="{{ route('materi', $course->id) }}" class="learn-button">Lanjutkan Belajar</a>
+  </div>
+@endforeach
+
     </div>
   </main>
 </body>
