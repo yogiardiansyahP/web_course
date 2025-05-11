@@ -6,6 +6,7 @@
   <title>Kursus Yang Kamu Ikuti</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/course.css') }}">
+
 </head>
 <body>
   <aside class="sidebar">
@@ -29,6 +30,8 @@
       <div class="tab">Kursus yang sudah selesai</div>
     </div>
     <div class="course-list">
+      
+      </div>
       @foreach ($courses as $course)
   <div class="course-item">
     <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="Course Image">
@@ -39,6 +42,7 @@
     <a href="{{ route('materi', $course->id) }}" class="learn-button">Lanjutkan Belajar</a>
   </div>
 @endforeach
+
     </div>
   </main>
 </body>

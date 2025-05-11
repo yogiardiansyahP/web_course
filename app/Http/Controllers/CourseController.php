@@ -169,7 +169,7 @@ class CourseController extends Controller
 
         $materials = Material::where('course_id', $course->id)->get();
 
-        return view('showMaterials', [
+        return view('materi', [
             'course' => $course,
             'materials' => $materials,
             'transaction' => $transaction,
