@@ -7,6 +7,8 @@ use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Transaction;
+
 
 class CourseController extends Controller
 {
@@ -155,11 +157,23 @@ class CourseController extends Controller
     
         return view('materi', compact('course'));
     }
-    
+
     public function showMaterials(Course $course)
     {
-        $materials = $course->materials;
-        return view('showMaterials', compact('course', 'materials'));
+        $user = Auth::user();
+
+        $transaction = Transaction::where('user_id', $user->id)
+            ->where('course_name', $course->name)
+            ->whereIn('status', ['settlement', 'capture', 'pending'])
+            ->first();
+
+        $materials = Material::where('course_id', $course->id)->get();
+
+        return view('showMaterials', [
+            'course' => $course,
+            'materials' => $materials,
+            'transaction' => $transaction,
+        ]);
+        
     }
-    
 }

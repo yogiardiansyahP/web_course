@@ -13,7 +13,7 @@
       <h2>Registrasi</h2>
       <p>Buat akun untuk menggunakan platform Codein Course</p>
 
-      <form action="{{ route('register.submit') }}" method="POST">
+      <form action="{{ route('register') }}" method="POST">
         @csrf
         <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required />
         @error('name') 

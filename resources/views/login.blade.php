@@ -19,7 +19,7 @@
         </div>
       @endif
 
-      <form method="POST" action="{{ route('login.submit') }}">
+      <form method="POST" action="{{ route('login.post') }}">
         @csrf
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
@@ -28,7 +28,7 @@
         </div>
         <button type="submit">Masuk</button>
         <p class="register-text">
-          Kamu belum memiliki akun? <a href="{{ route('register.form') }}">Registrasi</a>
+          Kamu belum memiliki akun? <a href="{{ route('register') }}">Registrasi</a>
         </p>
       </form>
     </div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+@php use Illuminate\Support\Str; @endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,35 +10,65 @@
 </head>
 <body>
     <aside class="sidebar">
-        <a href="{{ route('dashboard') }}" style="color: #3B82F6; margin-bottom: 20px;">←</a>
-        <a href="{{ route('daftarcourse') }}"><img src="{{ asset('asset/kursus.png') }}" alt="Kursus" width="20" /> Kursus Saya</a>
-        <a href="{{route('kelas')}}"><img src="{{ asset('asset/tersedia.png') }}" alt="Kursus" width="20" /> Kelas Yang Tersedia</a>
-        <a href="#" class="logout"><img src="{{ asset('asset/logout.png') }}" alt="Kursus" width="20" /> Keluar</a>
+        <h2><div class="menu-item" onclick="window.location.href='{{ route('dashboard') }}'">&larr; Kembali</div></h2>
+        <div class="menu-item">Pengenalan</div>
+        <div class="menu-item">Install mysql workbench</div>
+        <div class="menu-item">Quiz</div>
+        <div class="menu-item">Pengenalan</div>
+        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
+        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
+        <div class="menu-item">Data Manipulation Language (DML) Part I - 2</div>
+        <div class="menu-item">Quiz</div>
+        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
+        <div class="menu-item">Pembuatan Relasi Antara Tabel</div>
+        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
+        <div class="menu-item">Course selesai</div>
     </aside>
 
     <main class="main">
         <div class="header">
             <h1>Materi untuk Kursus: {{ $course->name }}</h1>
         </div>
-        <div class="course-list">
-            @foreach ($materials as $material)
-                <div class="course-item">
-                    <div class="details">
-                        <h3>{{ $material->title }}</h3>
-                        
-                        @if (Str::contains($material->video_url, 'youtube.com'))
-                            <!-- For YouTube videos -->
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ parse_url($material->video_url, PHP_URL_QUERY) }}" frameborder="0" allowfullscreen></iframe>
-                        @elseif (Str::contains($material->video_url, 'vimeo.com'))
-                            <!-- For Vimeo videos -->
-                            <iframe src="https://player.vimeo.com/video/{{ last(explode('/', $material->video_url)) }}" width="560" height="315" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                        @else
-                            <!-- For other video URLs, you can fallback to a regular link -->
-                            <p><a href="{{ $material->video_url }}" target="_blank">Lihat Video</a></p>
-                        @endif
+
+        @if ($transaction && in_array($transaction->status, ['settlement', 'capture', 'pending']))
+            <div class="course-list">
+                @foreach ($materials as $material)
+                    <div class="course-item">
+                        <div class="details">
+                            <h3>{{ $material->title }}</h3>
+
+                            @if (Str::contains($material->video_url, 'youtube.com') || Str::contains($material->video_url, 'youtu.be'))
+                                @php
+                                    parse_str(parse_url($material->video_url, PHP_URL_QUERY), $youtubeParams);
+                                    $youtubeId = $youtubeParams['v'] ?? Str::afterLast($material->video_url, '/');
+                                @endphp
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $youtubeId }}" frameborder="0" allowfullscreen></iframe>
+                            @elseif (Str::contains($material->video_url, 'vimeo.com'))
+                                @php
+                                    $vimeoId = Str::afterLast($material->video_url, '/');
+                                @endphp
+                                <iframe src="https://player.vimeo.com/video/{{ $vimeoId }}" width="560" height="315" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                            @else
+                                <p><a href="{{ $material->video_url }}" target="_blank" rel="noopener noreferrer">Lihat Video</a></p>
+                            @endif
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+        @else
+            <div class="not-enrolled">
+                <p>Kamu belum menyelesaikan pembayaran atau belum mendaftar pada kursus ini.</p>
+                <a href="{{ route('kelas') }}" class="btn-back">Kembali ke Daftar Kelas</a>
+            </div>
+        @endif
+
+        <div class="report">
+            Ada issue dengan konten ini? <span>Laporkan!</span>
+        </div>
+
+        <div class="navigation-buttons">
+            <button>&larr; Kembali</button>
+            <button>Selanjutnya &rarr;</button>
         </div>
     </main>
 </body>
