@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
-
+use App\Models\Materi;
 
 class CourseController extends Controller
 {
@@ -141,7 +141,7 @@ class CourseController extends Controller
 
     public function showUserCourse()
     {
-        $userId = Auth::id(); // This retrieves the ID of the authenticated user.
+        $userId = Auth::id();
     
         if (!$userId) {
             return redirect()->route('login')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
@@ -161,19 +161,41 @@ class CourseController extends Controller
     public function showMaterials(Course $course)
     {
         $user = Auth::user();
-
+    
         $transaction = Transaction::where('user_id', $user->id)
             ->where('course_name', $course->name)
             ->whereIn('status', ['settlement', 'capture', 'pending'])
             ->first();
-
+    
         $materials = Material::where('course_id', $course->id)->get();
-
+        $materis = $course->materis;
+    
         return view('materi', [
             'course' => $course,
             'materials' => $materials,
+            'materis' => $materis,
             'transaction' => $transaction,
         ]);
-        
     }
+    public function showMateriBySlug($slug)
+    {
+        $materi = Materi::where('slug', $slug)->firstOrFail();
+        $course = $materi->course;
+    
+        $transaction = Transaction::where('user_id', Auth::id())
+            ->where('course_name', $course->name)
+            ->whereIn('status', ['settlement', 'capture', 'pending'])
+            ->first();
+    
+        $materials = Material::where('course_id', $course->id)->get();
+        $materis = $course->materis;
+    
+        return view('materi', [
+            'course' => $course,
+            'materials' => $materials,
+            'materis' => $materis,
+            'transaction' => $transaction,
+            'materi' => $materi,
+        ]);
+    }    
 }

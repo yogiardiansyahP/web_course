@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
     Route::get('/kelas', [CourseController::class, 'showKelas'])->name('kelas');
     Route::get('/materi/{course}', [CourseController::class, 'showMaterials'])->name('materi');
+    Route::get('/materi/slug/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.show');
+    Route::get('/materi/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.slug');
     Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
     Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');

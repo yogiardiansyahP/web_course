@@ -26,6 +26,11 @@ class Course extends Model
         return $this->hasMany(Material::class);
     }
 
+    public function materis()
+    {
+        return $this->hasMany(Materi::class);
+    }
+
     // Status konstanta
     const STATUS_ACTIVE = 'aktif';
     const STATUS_INACTIVE = 'nonaktif';

@@ -43,7 +43,7 @@
       </form>
 
       <p class="footer-text">
-        Kamu sudah memiliki akun? <a href="{{ route('login.form') }}">Masuk</a>
+        Kamu sudah memiliki akun? <a href="{{ route('login.post') }}">Masuk</a>
       </p>
     </div>
 

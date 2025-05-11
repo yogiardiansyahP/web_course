@@ -11,18 +11,9 @@
 <body>
     <aside class="sidebar">
         <h2><div class="menu-item" onclick="window.location.href='{{ route('dashboard') }}'">&larr; Kembali</div></h2>
-        <div class="menu-item">Pengenalan</div>
-        <div class="menu-item">Install mysql workbench</div>
-        <div class="menu-item">Quiz</div>
-        <div class="menu-item">Pengenalan</div>
-        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
-        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
-        <div class="menu-item">Data Manipulation Language (DML) Part I - 2</div>
-        <div class="menu-item">Quiz</div>
-        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
-        <div class="menu-item">Pembuatan Relasi Antara Tabel</div>
-        <div class="menu-item">Data Manipulation Language (DML) Part I - 1</div>
-        <div class="menu-item">Course selesai</div>
+        @foreach ($materis as $materi)
+            <div class="menu-item" onclick="window.location.href='{{ route('materi.show', $materi->slug) }}'">{{ $materi->nama_materi }}</div>
+        @endforeach
     </aside>
 
     <main class="main">
