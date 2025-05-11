@@ -7,10 +7,14 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Api\CourseApiController;
+use App\Http\Controllers\AdminController;
 
 Route::post('/register', [AuthController::class, 'register'])->name('api.register');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout'])->name('api.logout');
+
+Route::post('/api-datacourse', [AdminController::class, 'apiDataCourse']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('api.checkout.showCheckout');
@@ -28,4 +32,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
+    Route::get('/courses', [CourseApiController::class, 'index']);
+    Route::get('/courses/{id}', [CourseApiController::class, 'show']);
+    Route::post('/courses', [CourseApiController::class, 'store']);
+    Route::put('/courses/{id}', [CourseApiController::class, 'update']);
+    Route::delete('/courses/{id}', [CourseApiController::class, 'destroy']);
+});
+
+Route::prefix('courses')->group(function () {
+    Route::post('/list', [CourseApiController::class, 'list']);
+    Route::post('/detail', [CourseApiController::class, 'detail']);
+    Route::post('/', [CourseApiController::class, 'store']);
+    Route::post('/update', [CourseApiController::class, 'update']);
+    Route::post('/delete', [CourseApiController::class, 'destroy']);
 });

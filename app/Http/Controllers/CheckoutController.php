@@ -12,6 +12,30 @@ use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
+    public function store(Request $request)
+{
+    $request->validate([
+        'order_id' => 'required',
+        'user_id' => 'required|exists:users,id',
+        'hargaAwal' => 'required|numeric',
+        'hargaDiskon' => 'required|numeric',
+        'voucher' => 'nullable|string',
+        'course_name' => 'required|string',
+    ]);
+
+    $transaction = new Transaction();
+    $transaction->order_id = $request->order_id;
+    $transaction->user_id = $request->user_id;
+    $transaction->harga_awal = $request->hargaAwal;
+    $transaction->harga_diskon = $request->hargaDiskon;
+    $transaction->voucher = $request->voucher;
+    $transaction->course_name = $request->course_name;
+    $transaction->status = 'pending'; // Default status
+    $transaction->save();
+
+    return response()->json(['message' => 'Transaction created successfully', 'transaction' => $transaction]);
+}
+
     public function checkoutPage($courseId)
     {
         $course = Course::findOrFail($courseId);

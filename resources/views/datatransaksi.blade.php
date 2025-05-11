@@ -17,23 +17,20 @@
             </div>
             <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="{{ url('/datacourse') }}">
-                <i class="fas fa-users"></i>
-                Course
+                <i class="fas fa-book"></i> Course
             </a>
             <a href="{{ url('/datauser') }}">
-                <i class="fas fa-users"></i>
-                User
+                <i class="fas fa-users"></i> User
             </a>
             <a href="#"><i class="fas fa-cogs"></i> Setting</a>
-            <a href="{{ url('/datatransaksi') }}">
-                <i class="fas fa-users"></i>
-                Transaksi
+            <a href="{{ url('/datatransaksi') }}" class="active">
+                <i class="fas fa-credit-card"></i> Transaksi
             </a>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
-            <h1>Transaksi</h1>
+            <h1>Data Transaksi</h1>
             <div class="certificate-table" style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead style="background-color: #f3f4f6;">
@@ -45,9 +42,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="3" style="text-align: center; padding: 20px; color: #6c757d;">Tidak ada transaksi</td>
-                        </tr>
+                        @forelse($transactions as $transaction)
+                            <tr>
+                                <td>{{ $transaction->user->name }}</td>
+                                <td>{{ $transaction->user->email }}</td>
+                                <td>{{ $transaction->course_name }}</td>
+                                <td>Rp {{ number_format($transaction->harga_diskon, 0, ',', '.') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 20px; color: #6c757d;">Tidak ada transaksi</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <label for="limit">Limit:

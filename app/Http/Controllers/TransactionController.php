@@ -112,21 +112,31 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function apiIndex(Request $request)
+    public function apiStore(Request $request)
     {
-        $userId = $request->user()->id;
-        $transactions = Transaction::where('user_id', $userId)->with('course')->get();
-
-        return response()->json([
-            'success' => true,
-            'data' => $transactions->map(function ($t) {
-                return [
-                    'order_id' => $t->order_id,
-                    'status' => $t->status,
-                    'course_name' => $t->course->title ?? null,
-                    'amount' => $t->amount,
-                ];
-            }),
+        $validated = $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'amount' => 'required|numeric',
+            'payment_method' => 'required|string',
         ]);
+    
+        $transaction = new Transaction();
+        $transaction->user_id = $request->user()->id;
+        $transaction->course_id = $validated['course_id'];
+        $transaction->amount = $validated['amount'];
+        $transaction->payment_method = $validated['payment_method'];
+        $transaction->status = 'pending';
+        $transaction->order_id = 'ORDER-' . uniqid();
+        $transaction->save();
+    
+        return response()->json([
+            'message' => 'Transaction created successfully',
+            'transaction' => [
+                'order_id' => $transaction->order_id,
+                'status' => $transaction->status,
+                'course_name' => $transaction->course->title ?? null,
+                'amount' => $transaction->amount,
+            ],
+        ], 201);
     }
 }

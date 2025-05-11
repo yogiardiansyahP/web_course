@@ -26,22 +26,34 @@ class AdminController extends Controller
         ));
     }
 
-    public function dataUser()
-{
-    $users = User::all();
-    return view('datauser', compact('users'));
-}
-
-    public function showUser()
+    public function apiDataCourse(Request $request)
     {
-        $users = User::all();
+        $courses = Course::with('materials')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $courses
+        ]);
+    }
+
+    public function dataUser(Request $request)
+    {
+        $limit = $request->input('limit', 4);
+        $users = User::paginate($limit);
+        return view('datauser', compact('users'));
+    }
+
+    public function showUser(Request $request)
+    {
+        $limit = $request->input('limit', 4);
+        $users = User::paginate($limit);
         return view('datauser', compact('users'));
     }
 
     public function showTransaksi()
     {
-        $users = User::all();
-        return view('datatransaksi', compact('users'));
+        $transactions = Transaction::with('user')->get();
+        return view('datatransaksi', compact('transactions'));
     }
 
     public function showCourse()

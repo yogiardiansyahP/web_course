@@ -44,46 +44,41 @@
 <main class="main">
   <h1>Sertifikat</h1>
 
-  <div class="certificate-card">
+  <div class="certificate-grid">
     <p><strong>Username: {{ Auth::user()->name }}</strong></p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID Sertifikat</th>
-          <th>Nama Course</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse ($certificates as $certificate)
-          <tr>
-            <td>{{ $certificate->id }}</td>
-            <td>{{ $certificate->course->title }}</td>
-            <td>
-              <a href="{{ route('sertifikat.detail', $certificate->id) }}" target="_blank" class="btn-view">Lihat</a>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="3" class="no-data">Tidak ada sertifikat</td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+    @forelse ($certificates as $certificate)
+      @if ($certificate->course)
+        <div class="certificate-card">
+          <div class="certificate-header">
+            <h2>{{ $certificate->course->name }}</h2>
+            <p>ID: {{ $certificate->id }}</p>
+          </div>
+          <div class="certificate-body">
+            @if ($certificate->certificate_path)
+              <a href="{{ asset($certificate->certificate_path) }}" target="_blank" class="btn-view">Lihat Sertifikat</a>
+            @else
+              <span class="no-data">Sertifikat belum tersedia</span>
+            @endif
+          </div>
+        </div>
+      @else
+        <div class="no-data">Course tidak tersedia</div>
+      @endif
+    @empty
+      <div class="no-data">Tidak ada sertifikat</div>
+    @endforelse
+  </div>
 
-    <div class="limit-control">
-      <label for="limit">Limit:</label>
-      <select id="limit" name="limit">
-        <option value="4">4</option>
-        <option value="8">8</option>
-        <option value="12">12</option>
-      </select>
-    </div>
+  <div class="limit-control">
+    <label for="limit">Limit:</label>
+    <select id="limit" name="limit">
+      <option value="4">4</option>
+      <option value="8">8</option>
+      <option value="12">12</option>
+    </select>
   </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/dashboard.js') }}"></script>
 </body>
 </html>

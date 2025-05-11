@@ -38,8 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
     Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('/checkout/{courseId}', [CheckoutController::class, 'checkoutPage'])->name('checkout.page');
+    Route::get('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{courseId}', [CheckoutController::class, 'checkoutPage'])->name('checkout');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::post('/save-transaction', [CheckoutController::class, 'saveTransaction']);
     Route::post('/midtrans-callback', [CheckoutController::class, 'midtransCallback']);
@@ -100,9 +100,11 @@ Route::prefix('api')->group(function () {
         Route::put('/settings/profile', [SettingController::class, 'apiUpdateProfile'])->name('api.settings.updateProfile');
         Route::put('/settings/password', [SettingController::class, 'apiUpdatePassword'])->name('api.settings.updatePassword');
         
-        Route::post('/transactions', [TransactionController::class, 'store']);
+        // Add the new POST endpoint for creating transactions
+        Route::post('/transactions', [TransactionController::class, 'apiStore'])->name('api.transactions.store');
         Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
         Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
         Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
+        Route::post('/api-datacourse', [AdminController::class, 'apiDataCourse']);
     });
 });

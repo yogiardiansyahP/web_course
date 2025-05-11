@@ -20,14 +20,17 @@ class Course extends Model
         'price'
     ];
 
+    // Relasi ke tabel materials
     public function materials()
     {
         return $this->hasMany(Material::class);
     }
 
+    // Status konstanta
     const STATUS_ACTIVE = 'aktif';
     const STATUS_INACTIVE = 'nonaktif';
 
+    // Method helper untuk daftar status
     public static function getAvailableStatuses()
     {
         return [

@@ -15,24 +15,23 @@
                 <i class="fas fa-user-circle" style="font-size: 50px;"></i>
                 <h2>{{ Auth::user()->name }}</h2>
             </div>
-            <a href="#">
+            <a href="{{ route('admin') }}">
                 <i class="fas fa-tachometer-alt"></i>
                 Dashboard
             </a>
-            <a href="{{ url('/datacourse') }}">
-                <i class="fas fa-users"></i>
+            <a href="{{ route('datacourse') }}">
+                <i class="fas fa-book"></i>
                 Course
             </a>
-            <a href="{{ url('/datauser') }}">
+            <a href="{{ route('datauser') }}">
                 <i class="fas fa-users"></i>
                 User
             </a>
-            
             <a href="#">
                 <i class="fas fa-cogs"></i>
                 Setting
             </a>
-            <a href="#">
+            <a href="{{ route('datatransaksi') }}">
                 <i class="fas fa-credit-card"></i>
                 Transaksi
             </a>
@@ -59,34 +58,35 @@
                     </div>
                 </div>
             </div>
-<div class="chart">
-    <h2>Daftar Peserta Kelas</h2>
-    <canvas id="courseChart" width="300" height="300" style="display: block;box-sizing: border-box;height: 150px;width: 150px;"></canvas>
-</div>
 
-<script>
-    const ctx = document.getElementById('courseChart').getContext('2d');
-    const courseChart = new Chart(ctx, {
-        type: 'pie', // Pie chart
-        data: {
-            labels: {!! json_encode($courses->pluck('name')) !!},
-            datasets: [{
-                data: {!! json_encode($courses->pluck('students_count')) !!},
-                backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f1c40f'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' },
-                tooltip: { enabled: true },
-                labels: {
-                    font: { size: 14 }
-                }
-            }
-        }
-    });
-</script>
+            <div class="chart">
+                <h2>Daftar Peserta Kelas</h2>
+                <canvas id="courseChart" width="300" height="300"></canvas>
+            </div>
+
+            <script>
+                const ctx = document.getElementById('courseChart').getContext('2d');
+                const courseChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: {!! json_encode($courses->pluck('name')) !!},
+                        datasets: [{
+                            data: {!! json_encode($courses->pluck('students_count')) !!},
+                            backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f1c40f'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: { enabled: true },
+                            labels: {
+                                font: { size: 14 }
+                            }
+                        }
+                    }
+                });
+            </script>
 
             <div class="activities">
                 <h2>Aktivitas Terkini</h2>

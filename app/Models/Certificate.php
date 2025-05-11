@@ -11,13 +11,19 @@ class Certificate extends Model
 
     protected $fillable = [
         'user_id',
-        'course_name',
-        'certificate_url',
-        'issued_date',
+        'course_id',
+        'title',
+        'certificate_path',
+        'issued_at',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }
