@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     // Checkout
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{courseId}', [CheckoutController::class, 'checkoutPage'])->name('checkout.page');
     Route::post('/get-snap-token', [CheckoutController::class, 'getSnapToken']);
     Route::post('/save-transaction', [CheckoutController::class, 'saveTransaction']);
     Route::post('/midtrans-callback', [CheckoutController::class, 'midtransCallback']);

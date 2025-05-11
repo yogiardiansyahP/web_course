@@ -17,6 +17,7 @@
     <p class="subtitle">Jelajahi berbagai pilihan kelas dan tingkatkan keterampilan anda</p>
 
     <div class="grid">
+<<<<<<< HEAD
      @foreach ($courses as $course)
     <a href="{{ route('checkout', $course->id) }}" style="text-decoration: none; color: inherit;">
         <div class="card" data-class="php-dasar">
@@ -26,46 +27,21 @@
                 <p>{{ $course->materials->count() }} Pelajaran</p>
                 <td>Rp {{ number_format($course->price, 0, ',', '.') }}</td>
             </div>
+=======
+      @foreach ($courses as $course)
+    <div class="card" data-class="php-dasar">
+        <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}" />
+        <div>
+            <h2>{{ $course->name }}</h2>
+            <p>{{ $course->materials->count() }} Pelajaran</p>
+            <a href="{{ route('checkout', ['courseId' => $course->id]) }}" class="view-detail"> Rp.{{ number_format($course->price, 0, ',', '.') }} </a>
+>>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
         </div>
     </a>
 @endforeach
 
 
     </div>
-    
-  
   </div>
-  
-
-  <script>
-    const userLoggedIn = @json(auth()->check());
-
-    function checkLogin(classType) {
-      if (userLoggedIn) {
-        window.location.href = "/kelas/" + classType;
-      } else {
-        Swal.fire({
-          title: 'Anda belum login!',
-          text: 'Silakan login terlebih dahulu untuk mengakses detail kelas.',
-          icon: 'warning',
-          confirmButtonText: 'Login',
-          showCancelButton: true,
-          cancelButtonText: 'Batal',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "{{ route('login') }}";
-          }
-        });
-      }
-    }
-
-    document.querySelectorAll('.view-detail').forEach(detailDiv => {
-      detailDiv.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-        const classType = this.closest('.card').getAttribute('data-class');
-        checkLogin(classType);
-      });
-    });
-  </script>
 </body>
 </html>

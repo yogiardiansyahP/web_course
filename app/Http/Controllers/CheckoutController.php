@@ -9,11 +9,10 @@ use App\Models\Course;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
-    public function showCheckout($courseId)
+    public function checkoutPage($courseId)
     {
         $course = Course::findOrFail($courseId);
         return view('checkout', compact('course'));
@@ -42,6 +41,8 @@ class CheckoutController extends Controller
         }
 
         $orderId = 'ORDER-' . uniqid();
+        $courseName = $request->course_name;
+        $userEmail = Auth::user()->email;
 
         $params = [
             'transaction_details' => [
@@ -50,8 +51,19 @@ class CheckoutController extends Controller
             ],
             'customer_details' => [
                 'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
+                'email' => $userEmail,
             ],
+            'custom_expiry' => [
+                'start_time' => now()->toDateTimeString(),
+                'unit' => 'minute',
+                'duration' => 60
+            ],
+            'payment_amounts' => [
+                [
+                    'amount' => $hargaDiskon,
+                    'currency' => 'IDR',
+                ]
+            ]
         ];
 
         try {
@@ -65,6 +77,8 @@ class CheckoutController extends Controller
                 'status' => 'waiting_payment',
                 'payment_method' => null,
                 'payment_status' => null,
+                'course_name' => $courseName,
+                'user_email' => $userEmail,
             ]);
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
@@ -74,36 +88,18 @@ class CheckoutController extends Controller
 
     public function saveTransaction(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-    
-        $validated = $request->validate([
-            'order_id' => 'required|string',
-            'user_id' => 'required|exists:users,id',
-            'hargaAwal' => 'required|numeric',
-            'hargaDiskon' => 'required|numeric',
-            'voucher' => 'nullable|string',
-            'status' => 'required|string|in:waiting_payment,completed,pending,failed,unknown',
-        ]);
-    
-        try {
-            $transaction = new Transaction();
-            $transaction->order_id = $validated['order_id'];
-            $transaction->user_id = $validated['user_id'];
-            $transaction->harga_awal = $validated['hargaAwal'];
-            $transaction->harga_diskon = $validated['hargaDiskon'];
-            $transaction->voucher = $validated['voucher'];
-            $transaction->status = $validated['status'];
-            $transaction->save();
-    
-            return response()->json(['message' => 'Transaction saved successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error saving transaction: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to save transaction'], 500);
-        }
+        $transaction = new Transaction();
+        $transaction->order_id = $request->order_id;
+        $transaction->user_id = $request->user_id;
+        $transaction->harga_awal = $request->hargaAwal;
+        $transaction->harga_diskon = $request->hargaDiskon;
+        $transaction->voucher = $request->voucher;
+        $transaction->course_name = $request->course_name;
+        $transaction->status = $request->status;
+        $transaction->save();
+
+        return response()->json(['message' => 'Transaction saved successfully.']);
     }
-    
 
     public function midtransCallback(Request $request)
     {
@@ -130,6 +126,12 @@ class CheckoutController extends Controller
 
             $transaction->payment_method = $json['payment_type'] ?? null;
             $transaction->payment_status = $json['transaction_status'] ?? null;
+
+            if (!$transaction->course_name) {
+                $course = Course::where('id', $json['course_id'])->first();
+                $transaction->course_name = $course ? $course->name : 'Unknown Course';
+            }
+
             $transaction->save();
         }
 
@@ -139,7 +141,7 @@ class CheckoutController extends Controller
     public function showTransactions()
     {
         $transactions = Transaction::where('user_id', Auth::id())->get();
-        return view('transaksi', compact('transactions'));
+        return response()->json(['transactions' => $transactions]);
     }
 
     public function handlePaymentCallback(Request $request)
@@ -161,6 +163,6 @@ class CheckoutController extends Controller
             $transaction->save();
         }
 
-        return redirect()->route('transaksi.detail', ['transaction' => $transaction->id])->with('status', $status);
+        return response()->json(['message' => 'Payment status updated successfully']);
     }
 }

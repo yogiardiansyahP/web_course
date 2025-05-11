@@ -121,6 +121,12 @@ class CourseController extends Controller
     public function showCourses()
     {
         $courses = Course::with('materials')->get();
+        return view('daftarcourse', compact('courses'));
+    }
+
+    public function showKelas()
+    {
+        $courses = Course::with('materials')->get();
         return view('kelas', compact('courses'));
     }
 
@@ -129,6 +135,7 @@ class CourseController extends Controller
         $courses = Course::with('materials')->get();
         return view('daftarcourse', compact('courses'));
     }
+<<<<<<< HEAD
 
     public function showMateri($id)
 {
@@ -144,6 +151,8 @@ class CourseController extends Controller
         $course = Course::with('materials')->findOrFail($id);
         return view('courses.show', compact('course'));
     }
+=======
+>>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
 
     public function showUserCourse()
     {

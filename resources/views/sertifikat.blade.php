@@ -29,9 +29,15 @@
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Logo WPU Course" class="logo">
   <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
+<<<<<<< HEAD
   <a href="{{ route('daftarcourse') }}" class="menu-item">Course</a>
   <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
   <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
+=======
+  <a href="{{ route('kelas') }}" class="menu-item">Course</a>
+  <a href="{{ route('sertifikat') }}" class="menu-item active">Sertifikat</a>
+  <a href="{{ route('transaksi') }}" class="menu-item">Transaksi</a>
+>>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
   <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
   <hr style="margin: 20px 0;">
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -45,7 +51,7 @@
   <h1>Sertifikat</h1>
 
   <div class="certificate-card">
-    <p><strong>Username:</strong> {{ Auth::user()->username }}</p>
+    <p><strong>Username: {{ Auth::user()->name }}</strong></p>
 
     <table>
       <thead>

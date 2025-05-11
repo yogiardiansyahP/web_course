@@ -126,7 +126,8 @@
                             hargaAwal: {{ $course->price }},
                             hargaDiskon: finalHargaDiskon,
                             voucher: voucher,
-                            status: 'pending', // status sementara, akan disesuaikan setelah callback
+                            course_name: '{{ $course->name }}',
+                            status: 'pending',
                         }),
                         headers: {
                             'Content-Type': 'application/json',
@@ -135,6 +136,7 @@
                     }).then(() => {
                         snap.pay(data.token, {
                             onSuccess: function(result) {
+                                window.location.href = '/transaksi/';
                                 handleMidtransStatus(result.transaction_status);
                             },
                             onPending: function(result) {
@@ -154,23 +156,6 @@
             })
             .catch(() => alert('Gagal memproses pembayaran'));
         }
-
-        function handleMidtransStatus(status) {
-            const statusMapping = {
-                'capture': 'completed',
-                'settlement': 'completed',
-                'pending': 'pending',
-                'deny': 'failed',
-                'cancel': 'failed',
-                'expire': 'failed',
-                'failure': 'failed',
-                'unknown': 'unknown',
-            };
-
-            const mappedStatus = statusMapping[status] || 'unknown';
-            window.location.href = '/transaksi/' + mappedStatus;
-        }
-
     </script>
 </body>
 </html>
