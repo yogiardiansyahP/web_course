@@ -15,17 +15,11 @@
                 <i class="fas fa-user-circle" style="font-size: 50px;"></i>
                 <h2>{{ Auth::user()->name }}</h2>
             </div>
-            <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="{{ url('/datacourse') }}">
-                <i class="fas fa-book"></i> Course
-            </a>
-            <a href="{{ url('/datauser') }}">
-                <i class="fas fa-users"></i> User
-            </a>
-            <a href="#"><i class="fas fa-cogs"></i> Setting</a>
-            <a href="{{ url('/datatransaksi') }}" class="active">
-                <i class="fas fa-credit-card"></i> Transaksi
-            </a>
+            <a href="{{ route('admin') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="{{ route('datacourse') }}"><i class="fas fa-book"></i> Course</a>
+            <a href="{{ route('datauser') }}"><i class="fas fa-users"></i> User</a>
+            <a href="{{ route('pengaturan') }}"><i class="fas fa-cogs"></i> Setting</a>
+            <a href="{{ route('datatransaksi') }}"><i class="fas fa-credit-card"></i> Transaksi</a>
         </div>
 
         <!-- Main Content -->

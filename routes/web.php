@@ -109,5 +109,6 @@ Route::prefix('api')->group(function () {
         Route::put('/transactions/{transaction}', [TransactionController::class, 'update']);
         Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy']);
         Route::post('/api-datacourse', [AdminController::class, 'apiDataCourse']);
+        Route::middleware('auth:sanctum')->post('/progress-chart', [ProgressController::class, 'getChartProgress']);
     });
 });

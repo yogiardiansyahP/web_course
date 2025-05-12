@@ -9,6 +9,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Api\CourseApiController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProgressController;
 
 Route::post('/register', [AuthController::class, 'register'])->name('api.register');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/courses', [CourseApiController::class, 'store']);
     Route::put('/courses/{id}', [CourseApiController::class, 'update']);
     Route::delete('/courses/{id}', [CourseApiController::class, 'destroy']);
+    Route::middleware('auth:sanctum')->post('/progress-chart', [ProgressController::class, 'getChartProgress']);
 });
 
 Route::prefix('courses')->group(function () {
