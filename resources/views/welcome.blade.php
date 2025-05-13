@@ -29,7 +29,8 @@
           </form>
         @else
           <a href="{{ route('register') }}" class="btn-outline">Daftar</a>
-          <a href="{{ route('login') }}" class="btn-filled">Masuk</a>
+<a href="{{ route('login') }}" class="btn-filled">Masuk</a>
+
         @endif
       </div>
     </nav>

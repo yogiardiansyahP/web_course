@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-    {
+{
+    if (!Schema::hasColumn('transactions', 'course_name')) {
         Schema::table('transactions', function (Blueprint $table) {
             $table->string('course_name')->nullable();
         });
     }
+}
+
     
     public function down()
     {

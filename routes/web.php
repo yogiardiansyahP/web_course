@@ -15,26 +15,29 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
 Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 Route::get('/home', function () {
     return view('welcome');
 })->name('kembali');
 
+
 Route::middleware('auth')->group(function () {
     // User-related routes
     Route::get('/dashboard', [ProgressController::class, 'index'])->name('dashboard');
-    Route::get('/kelas', [CourseController::class, 'showKelas'])->name('kelas');
+    Route::get('/kelas', [CourseController::class, 'showKelas'])->name('available_classes');
+
     Route::get('/materi/{course}', [CourseController::class, 'showMaterials'])->name('materi');
     Route::get('/materi/slug/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.show');
     Route::get('/materi/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.slug');
@@ -68,7 +71,8 @@ Route::middleware('auth')->group(function () {
     
     // Transaction and payment-related routes
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi');
-    Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
+
+Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.detail');
     Route::post('/midtrans/webhook', [CheckoutController::class, 'handlePaymentCallback']);
 });
 
@@ -111,4 +115,11 @@ Route::prefix('api')->group(function () {
         Route::post('/api-datacourse', [AdminController::class, 'apiDataCourse']);
         Route::middleware('auth:sanctum')->post('/progress-chart', [ProgressController::class, 'getChartProgress']);
     });
+    Route::get('/kursus-selesai', [CourseController::class, 'selesai'])->name('kursus_selesai');
+
+    Route::get('/kelas', [CourseController::class, 'showKelas'])->name('kelas');
+    
+    Route::get('/logout', function () {
+    return view('login');
+})->name('logout');
 });

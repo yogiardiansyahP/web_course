@@ -139,24 +139,26 @@ class CourseController extends Controller
         return view('daftarcourse', compact('courses'));
     }
 
-    public function showUserCourse()
-    {
-        $userId = Auth::id();
-    
-        if (!$userId) {
-            return redirect()->route('login')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
-        }
-    
-        $course = Course::whereHas('enrolledUsers', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->with('materials')->first();
-    
-        if (!$course) {
-            return redirect()->route('kelas')->with('warning', 'Kamu belum terdaftar di kursus manapun.');
-        }
-    
-        return view('materi', compact('course'));
-    }
+    public function showUserCourses()
+{
+    $userId = Auth::id();
+
+    // Get courses that are being studied
+    $courses = Course::whereHas('transactions', function ($query) use ($userId) {
+        $query->where('user_id', $userId)
+              ->whereIn('status', ['pending', 'in_progress']);
+    })->get();
+
+    // Get courses that are completed
+    $completedCourses = Course::whereHas('transactions', function ($query) use ($userId) {
+        $query->where('user_id', $userId)
+              ->where('status', 'selesai');
+    })->get();
+
+    return view('datacourse', compact('courses', 'completedCourses'));
+}
+
+
 
     public function showMaterials(Course $course)
     {
@@ -198,4 +200,18 @@ class CourseController extends Controller
             'materi' => $materi,
         ]);
     }    
+
+    public function selesai()
+{
+    $user = Auth::user();
+
+    // Ambil transaksi kursus milik user yang statusnya selesai
+    $kursusSelesai = Transaction::with('course') // pastikan relasi 'course' ada di model Transaction
+        ->where('user_id', $user->id) // Fix here
+        ->where('status', 'selesai') // sesuaikan dengan status selesai yang kamu pakai
+        ->get();
+
+    return view('kursus_selesai', compact('kursusSelesai'));
+}
+
 }

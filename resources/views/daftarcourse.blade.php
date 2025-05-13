@@ -31,8 +31,13 @@
       <h1>Kursus Yang Kamu Ikuti</h1>
     </div>
     <div class="tabs">
-      <div class="tab active">Kursus yang sedang di pelajari</div>
-      <div class="tab">Kursus yang sudah selesai</div>
+      <div class="tab active" onclick="window.location.href={{route('daftarcourse')}}">
+        Kursus yang sedang di pelajari</div>
+        
+      <div class="tab" onclick="window.location.href='{{ route('kursus_selesai') }}'">
+    Kursus yang sudah selesai
+</div>
+
     </div>
     <div class="course-list">
       @foreach ($courses as $course)
@@ -48,7 +53,7 @@
           @if ($firstMateri)
             <a href="{{ route('materi.show', $firstMateri->slug) }}" class="learn-button">Lanjutkan Belajar</a>
           @else
-            <span class="learn-button disabled">Belum Ada Materi</span>
+            <a style="text-decoration: none; color: #3B82F6;" href="{{route('kelas')}}">Belum ada materi</a>
           @endif
         </div>
       @endforeach
