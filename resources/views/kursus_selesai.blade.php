@@ -6,6 +6,49 @@
   <title>Kursus Yang Kamu Ikuti</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/course.css') }}">
+  <style> .course-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .course-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .course-info img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      background-color: #f3f4f6;
+    }
+
+    .course-info h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .course-info p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .course-action {
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: 14px;
+    }</style>
+  
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const tabs = document.querySelectorAll('.tab');
@@ -74,7 +117,32 @@
       Kursus yang sudah selesai
       </div>
 
+      
+
     </div>
+
+    <div class="course-card">
+      <div class="course-info">
+        <img src="asset/laravel.png" alt="Course Image">
+        <div>
+          <h3>Laravel Untuk Pemula</h3>
+          <p>Laravel untuk PHP</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="course-card">
+      <div class="course-info">
+        <img src="asset/laravel.png" alt="Course Image">
+        <div>
+          <h3>Laravel Untuk Pemula</h3>
+          <p>Laravel untuk PHP</p>
+        </div>
+      </div>
+      
+    </div>
+
 
   </main>
 </body>

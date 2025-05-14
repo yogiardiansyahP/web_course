@@ -10,28 +10,19 @@
 <body>
   <div class="container">
     <aside class="sidebar">
-      <div>
-        <div class="logo">
-          <img src="{{ asset('asset/logo.png') }}" alt="Logo WPU Course" />
-        </div>
-        <nav>
-        <ul>
-        <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
-        <a href="{{ route('daftarcourse') }}" class="menu-item">Course</a>
-        <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
-        <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
-        <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
-        </ul>
-        </nav>
-      </div>
-      <div class="sidebar-footer">
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <button type="submit" class="logout-btn">Logout</button>
-        </form>
-        <a class="support" href="#"><img src="{{ asset('asset/wa-icon.png') }}" alt="Support"> Contact Support</a>
-      </div>
-    </aside>
+  <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Codein Course" class="logo">
+  <a href="{{ route('dashboard') }}"  class="">Dashboard</a>
+  <a href="{{ route('daftarcourse') }}">Course</a>
+  <a href="{{ route('sertifikat') }}">Sertifikat</a>
+  <a href="{{ route('transaksi') }}">Transaksi</a>
+  <a href="{{ route('pengaturan') }}" class="active">Pengaturan</a>
+  <hr style="margin: 20px 0;">
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+  </form>
+  <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+  <a href="{{ route('login') }}">Contact Support</a>
+</aside>
 
     <main class="main">
       <header>
@@ -40,7 +31,7 @@
 
       <section class="tabs">
         <button class="tab active">Profile</button>
-        <button class="tab">Keamanan</button>
+        
       </section>
 
       <section class="profile-form">

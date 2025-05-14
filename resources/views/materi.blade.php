@@ -46,6 +46,8 @@
                     </div>
                 @endforeach
             </div>
+
+            
         @else
             <div class="not-enrolled">
                 <p>Kamu belum menyelesaikan pembayaran atau belum mendaftar pada kursus ini.</p>
