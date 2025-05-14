@@ -1,17 +1,29 @@
 const ctx = document.getElementById('progressChart').getContext('2d');
+
+const now = new Date();
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const currentMonth = now.getMonth();
+
+const labels = [];
+for (let i = 0; i < 12; i++) {
+  const monthIndex = (currentMonth + 1 - i + 12) % 12;
+  labels.push(months[monthIndex]);
+}
+labels.reverse();
+
 const progressChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov'],
+    labels: labels,
     datasets: [{
-      label: 'Progress Belajar',
+      label: 'Learning Progress',
       data: window.progressData ?? [],
       borderColor: '#2563eb',
       backgroundColor: 'rgba(37, 99, 235, 0.2)',
       tension: 0.3,
       pointRadius: 5,
       pointHoverRadius: 7,
-      fill: false
+      fill: true
     }]
   },
   options: {
@@ -24,7 +36,7 @@ const progressChart = new Chart(ctx, {
     scales: {
       y: {
         beginAtZero: true,
-        max: 110
+        max: 100
       }
     }
   }

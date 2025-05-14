@@ -26,18 +26,25 @@
   </script>
 @endif
 
+@if (session('message'))
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: '{{ session('message') }}',
+      confirmButtonText: 'OK'
+    });
+  });
+</script>
+@endif
+
 <aside class="sidebar">
   <img src="{{ asset('asset/dashboard_logo.png') }}" alt="Logo WPU Course" class="logo">
   <a href="{{ route('dashboard') }}" class="menu-item">Dashboard</a>
-<<<<<<< HEAD
   <a href="{{ route('daftarcourse') }}" class="menu-item">Course</a>
-  <a href="{{ route('sertifikat') }}" class="menu-item">Sertifikat</a>
-  <a href="{{ route('transaksi') }}" class="menu-item active">Transaksi</a>
-=======
-  <a href="{{ route('kelas') }}" class="menu-item">Course</a>
   <a href="{{ route('sertifikat') }}" class="menu-item active">Sertifikat</a>
   <a href="{{ route('transaksi') }}" class="menu-item">Transaksi</a>
->>>>>>> 2a2737ae0e6bbb245f12d90c4aa77658e0926a40
   <a href="{{ route('pengaturan') }}" class="menu-item">Pengaturan</a>
   <hr style="margin: 20px 0;">
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -50,15 +57,16 @@
 <main class="main">
   <h1>Sertifikat</h1>
 
-  <div class="certificate-grid">
-    <p><strong>Username: {{ Auth::user()->name }}</strong></p>
+  <p><strong>Username: {{ Auth::user()->name }}</strong></p>
 
+  <div class="certificate-grid">
     @forelse ($certificates as $certificate)
       @if ($certificate->course)
         <div class="certificate-card">
           <div class="certificate-header">
             <h2>{{ $certificate->course->name }}</h2>
-            <p>ID: {{ $certificate->id }}</p>
+            <p>ID Sertifikat: {{ $certificate->id }}</p>
+            <p>Diterbitkan: {{ \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d F Y') }}</p>
           </div>
           <div class="certificate-body">
             @if ($certificate->certificate_path)

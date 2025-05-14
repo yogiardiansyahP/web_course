@@ -40,11 +40,14 @@
         <div id="materiContainer">
             <label>Materi Pembelajaran</label>
             <div class="materi-item row mb-2">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input type="text" name="materials[0][title]" class="form-control" placeholder="Judul Materi" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input type="text" name="materials[0][video]" class="form-control" placeholder="Link Video (YouTube atau lainnya)" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="materials[0][slug]" class="form-control" placeholder="Slug (misal: intro-kelas)" required>
                 </div>
             </div>
         </div>
@@ -80,6 +83,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>Judul</th>
+                                    <th>Slug</th>
                                     <th>Link</th>
                                 </tr>
                             </thead>
@@ -87,7 +91,17 @@
                                 @foreach ($course->materials as $material)
                                     <tr>
                                         <td>{{ $material->title }}</td>
-                                        <td><a href="{{ $material->video_url }}" target="_blank">{{ $material->video_url }}</a></td>
+                                        <td>{{ $material->slug }}</td>
+                                        <td>
+                                            @php
+                                                preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^\s&]+)/', $material->video_url, $matches);
+                                            @endphp
+                                            @if(isset($matches[1]))
+                                                <iframe width="200" height="113" src="https://www.youtube.com/embed/{{ $matches[1] }}" frameborder="0" allowfullscreen></iframe>
+                                            @else
+                                                <a href="{{ $material->video_url }}" target="_blank">{{ $material->video_url }}</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -118,11 +132,14 @@
         const materiItem = document.createElement('div');
         materiItem.classList.add('materi-item', 'row', 'mb-2');
         materiItem.innerHTML = `
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <input type="text" name="materials[${index}][title]" class="form-control" placeholder="Judul Materi" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <input type="text" name="materials[${index}][video]" class="form-control" placeholder="Link Video" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="materials[${index}][slug]" class="form-control" placeholder="Slug (misal: intro-kelas)" required>
             </div>
         `;
         container.appendChild(materiItem);

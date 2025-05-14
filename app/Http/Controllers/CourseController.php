@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Materi;
+use Illuminate\Support\Str;
+use App\Models\ProgressBelajar;
 
 class CourseController extends Controller
 {
@@ -33,6 +35,8 @@ class CourseController extends Controller
             'mentor' => 'nullable|string|max:255',
             'materials.*.title' => 'required|string',
             'materials.*.video' => 'required|string',
+            'materials.*.slug' => 'required|string|alpha_dash',
+            'price' => 'required|numeric',
         ]);
 
         if ($request->hasFile('thumbnail')) {
@@ -47,13 +51,24 @@ class CourseController extends Controller
             'thumbnail' => $path,
             'status' => $request->status,
             'mentor' => $request->mentor,
+            'slug' => Str::slug($request->name),
+            'price' => $request->price,
         ]);
 
         if ($request->has('materials')) {
             foreach ($request->materials as $material) {
+                $slug = Str::slug($material['title']);
+
                 $course->materials()->create([
                     'title' => $material['title'],
                     'video_url' => $material['video'],
+                    'slug' => $slug,
+                ]);
+
+                Materi::create([
+                    'course_id' => $course->id,
+                    'nama_materi' => $material['title'],
+                    'slug' => $slug,
                 ]);
             }
         }
@@ -77,29 +92,62 @@ class CourseController extends Controller
             'price' => 'required|numeric',
             'materials.*.title' => 'required|string',
             'materials.*.video' => 'nullable|url',
+            'materials.*.slug' => 'nullable|string|alpha_dash',
         ]);
 
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
 
-        $course->update($validated);
+        $course->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'thumbnail' => $validated['thumbnail'] ?? $course->thumbnail,
+            'status' => $validated['status'],
+            'mentor' => $validated['mentor'],
+            'slug' => Str::slug($validated['name']),
+            'price' => $validated['price'],
+        ]);
 
         if ($request->has('materials')) {
             foreach ($request->materials as $materialData) {
+                $slug = Str::slug($materialData['title']);
+
                 if (isset($materialData['id'])) {
                     $material = Material::find($materialData['id']);
                     if ($material) {
                         $material->update([
                             'title' => $materialData['title'],
                             'video_url' => $materialData['video'],
+                            'slug' => $slug,
                         ]);
+
+                        $materi = Materi::where('course_id', $course->id)->where('slug', $material->slug)->first();
+                        if ($materi) {
+                            $materi->update([
+                                'nama_materi' => $materialData['title'],
+                                'slug' => $slug,
+                            ]);
+                        } else {
+                            Materi::create([
+                                'course_id' => $course->id,
+                                'nama_materi' => $materialData['title'],
+                                'slug' => $slug,
+                            ]);
+                        }
                     }
                 } else {
                     Material::create([
                         'course_id' => $course->id,
                         'title' => $materialData['title'],
                         'video_url' => $materialData['video'],
+                        'slug' => $slug,
+                    ]);
+
+                    Materi::create([
+                        'course_id' => $course->id,
+                        'nama_materi' => $materialData['title'],
+                        'slug' => $slug,
                     ]);
                 }
             }
@@ -111,6 +159,7 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         $course->materials()->delete();
+        Materi::where('course_id', $course->id)->delete();
 
         if ($course->thumbnail && Storage::exists('public/' . $course->thumbnail)) {
             Storage::delete('public/' . $course->thumbnail);
@@ -140,38 +189,40 @@ class CourseController extends Controller
     }
 
     public function showUserCourses()
-{
-    $userId = Auth::id();
+    {
+        $userId = Auth::id();
 
-    // Get courses that are being studied
-    $courses = Course::whereHas('transactions', function ($query) use ($userId) {
-        $query->where('user_id', $userId)
-              ->whereIn('status', ['pending', 'in_progress']);
-    })->get();
+        $courses = Course::whereHas('transactions', function ($query) use ($userId) {
+            $query->where('user_id', $userId)
+                ->whereIn('status', ['pending', 'in_progress']);
+        })->get();
 
-    // Get courses that are completed
-    $completedCourses = Course::whereHas('transactions', function ($query) use ($userId) {
-        $query->where('user_id', $userId)
-              ->where('status', 'selesai');
-    })->get();
+        $completedCourses = Course::whereHas('transactions', function ($query) use ($userId) {
+            $query->where('user_id', $userId)
+                ->where('status', 'selesai');
+        })->get();
 
-    return view('datacourse', compact('courses', 'completedCourses'));
-}
+        $progressData = ProgressBelajar::where('user_id', $userId)
+            ->pluck('persentase', 'course_id')
+            ->toArray();
 
+        $courseLabels = $courses->pluck('name')->toArray();
 
-
+        return view('datacourse', compact('courses', 'completedCourses', 'progressData', 'courseLabels'));
+    }
+    
     public function showMaterials(Course $course)
     {
         $user = Auth::user();
-    
+
         $transaction = Transaction::where('user_id', $user->id)
             ->where('course_name', $course->name)
             ->whereIn('status', ['settlement', 'capture', 'pending'])
             ->first();
-    
+
         $materials = Material::where('course_id', $course->id)->get();
         $materis = $course->materis;
-    
+
         return view('materi', [
             'course' => $course,
             'materials' => $materials,
@@ -179,39 +230,62 @@ class CourseController extends Controller
             'transaction' => $transaction,
         ]);
     }
+
     public function showMateriBySlug($slug)
     {
         $materi = Materi::where('slug', $slug)->firstOrFail();
         $course = $materi->course;
-    
+
         $transaction = Transaction::where('user_id', Auth::id())
             ->where('course_name', $course->name)
             ->whereIn('status', ['settlement', 'capture', 'pending'])
             ->first();
-    
+
         $materials = Material::where('course_id', $course->id)->get();
         $materis = $course->materis;
-    
+
+        // Define the currentSlug
+        $currentSlug = $materi->slug;
+
         return view('materi', [
             'course' => $course,
             'materials' => $materials,
             'materis' => $materis,
             'transaction' => $transaction,
             'materi' => $materi,
+            'currentSlug' => $currentSlug, // Pass the currentSlug to the view
         ]);
-    }    
+    }
+
+    public function lanjutkanMateri($slug)
+    {
+        $user = Auth::user();
+        $materi = Materi::where('slug', $slug)->firstOrFail();
+        $course = $materi->course;
+        $materis = $course->materis()->orderBy('id')->get();
+
+        $slugs = $materis->pluck('slug')->values();
+        $currentIndex = $slugs->search($slug);
+        $total = $slugs->count();
+        $persentase = (int)(($currentIndex + 1) / $total * 100);
+
+        ProgressBelajar::updateOrCreate(
+            ['user_id' => $user->id],
+            ['persentase' => $persentase]
+        );
+
+        return redirect()->route('materi.show', $slug);
+    }
 
     public function selesai()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Ambil transaksi kursus milik user yang statusnya selesai
-    $kursusSelesai = Transaction::with('course') // pastikan relasi 'course' ada di model Transaction
-        ->where('user_id', $user->id) // Fix here
-        ->where('status', 'selesai') // sesuaikan dengan status selesai yang kamu pakai
-        ->get();
+        $kursusSelesai = Transaction::with('course')
+            ->where('user_id', $user->id)
+            ->where('status', 'selesai')
+            ->get();
 
-    return view('kursus_selesai', compact('kursusSelesai'));
-}
-
+        return view('kursus_selesai', compact('kursusSelesai'));
+    }
 }

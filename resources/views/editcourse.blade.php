@@ -48,11 +48,14 @@
             @foreach ($course->materials as $index => $material)
             <div class="materi-item row mb-2">
                 <input type="hidden" name="materials[{{ $index }}][id]" value="{{ $material->id }}">
-                <div class="col-md-6">
-                    <input type="text" name="materials[{{ $index }}][title]" value="{{ old('materials.' . $index . '.title', $material->title) }}" class="form-control" required>
+                <div class="col-md-4">
+                    <input type="text" name="materials[{{ $index }}][title]" value="{{ old('materials.' . $index . '.title', $material->title) }}" class="form-control title-input" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input type="text" name="materials[{{ $index }}][video]" value="{{ old('materials.' . $index . '.video', $material->video_url) }}" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="materials[{{ $index }}][slug]" value="{{ old('materials.' . $index . '.slug', $material->slug) }}" class="form-control slug-input" required>
                 </div>
             </div>
             @endforeach
@@ -65,6 +68,29 @@
 </div>
 
 <script>
+    function slugify(text) {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')       // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+            .replace(/\-\-+/g, '-');    // Replace multiple - with single -
+    }
+
+    function attachSlugEvents() {
+        const items = document.querySelectorAll('.materi-item');
+        items.forEach(item => {
+            const titleInput = item.querySelector('.title-input');
+            const slugInput = item.querySelector('.slug-input');
+            if (titleInput && slugInput) {
+                titleInput.addEventListener('input', () => {
+                    slugInput.value = slugify(titleInput.value);
+                });
+            }
+        });
+    }
+
     function addMateri(startIndex) {
         const container = document.getElementById('materiContainer');
         const index = container.querySelectorAll('.materi-item').length;
@@ -72,15 +98,20 @@
         const materiItem = document.createElement('div');
         materiItem.classList.add('materi-item', 'row', 'mb-2');
         materiItem.innerHTML = `
-            <div class="col-md-6">
-                <input type="text" name="materials[${index}][title]" class="form-control" placeholder="Judul Materi" required>
+            <div class="col-md-4">
+                <input type="text" name="materials[${index}][title]" class="form-control title-input" placeholder="Judul Materi" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <input type="text" name="materials[${index}][video]" class="form-control" placeholder="Link Video" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="materials[${index}][slug]" class="form-control slug-input" placeholder="Slug" required>
             </div>
         `;
         container.appendChild(materiItem);
+        attachSlugEvents();
     }
-</script>
 
+    attachSlugEvents();
+</script>
 @endsection

@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/materi/{course}', [CourseController::class, 'showMaterials'])->name('materi');
     Route::get('/materi/slug/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.show');
     Route::get('/materi/{slug}', [CourseController::class, 'showMateriBySlug'])->name('materi.slug');
+    Route::get('/materi/lanjut/{slug}', [CourseController::class, 'lanjutkanMateri'])->name('materi.lanjut');
     Route::get('/daftarcourse', [CourseController::class, 'showCourses'])->name('daftarcourse');
     Route::get('/daftar-course', [CourseController::class, 'showData'])->name('daftarcourse');
     Route::get('/checkout/{courseId}', [CheckoutController::class, 'showCheckout'])->name('checkout');
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaksi/{status}', [TransactionController::class, 'showStatus'])->name('transaksi.status');
     Route::get('/sertifikat', [CertificateController::class, 'index'])->name('sertifikat');
     Route::get('/sertifikat/{id}', [CertificateController::class, 'show'])->name('sertifikat.detail');
+    Route::post('/course/{id}/complete', [CertificateController::class, 'completeCourse'])->name('certificate.complete');
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('pengaturan');
     Route::put('/pengaturan/profile', [SettingController::class, 'updateProfile'])->name('pengaturan.update');
     Route::put('/pengaturan/password', [SettingController::class, 'updatePassword'])->name('pengaturan.password');

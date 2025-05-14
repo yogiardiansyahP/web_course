@@ -65,23 +65,40 @@ class ProgressController extends Controller
             ]);
         }
     }
-    
-    public function getChartProgress(Request $request)
+
+    public function getChartProgress()
     {
         $userId = Auth::id();
         $progressData = ProgressBelajar::where('user_id', $userId)
             ->orderBy('created_at', 'desc')
-            ->get(['persentase'])
-            ->pluck('persentase')
-            ->toArray();
-
-        $progressDataFilled = array_fill(0, 11, 0);
-        foreach ($progressData as $value) {
-            $progressDataFilled[] = $value;
+            ->take(12)
+            ->get(['created_at', 'persentase'])
+            ->map(function ($item) {
+                return [
+                    'date' => $item->created_at->format('M Y'),
+                    'persentase' => $item->persentase
+                ];
+            })->toArray();
+    
+        $labels = [];
+        $data = [];
+        foreach ($progressData as $item) {
+            $labels[] = $item['date'];
+            $data[] = $item['persentase'];
         }
-
-        $progressDataFilled = array_slice($progressDataFilled, -11);
-
-        return response()->json($progressDataFilled);
+    
+        $dateNow = now();
+        for ($i = 0; $i < 12; $i++) {
+            $date = $dateNow->copy()->subMonth($i)->format('M Y');
+            if (!in_array($date, $labels)) {
+                $labels[] = $date;
+                $data[] = 0;
+            }
+        }
+    
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
     }
 }
