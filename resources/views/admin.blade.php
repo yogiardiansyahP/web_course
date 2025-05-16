@@ -27,10 +27,7 @@
                 <i class="fas fa-users"></i>
                 User
             </a>
-            <a href="#">
-                <i class="fas fa-cogs"></i>
-                Setting
-            </a>
+            
             <a href="{{ route('datatransaksi') }}">
                 <i class="fas fa-credit-card"></i>
                 Transaksi

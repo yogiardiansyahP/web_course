@@ -121,23 +121,37 @@
 
     </div>
 
-    <div class="course-card">
-      <div class="course-info">
-        <img src="asset/laravel.png" alt="Course Image">
-        <div>
-          <h3>Laravel Untuk Pemula</h3>
-          <p>Laravel untuk PHP</p>
-        </div>
-      </div>
-      
-    </div>
+    
 
     <div class="course-card">
       <div class="course-info">
         <img src="asset/laravel.png" alt="Course Image">
         <div>
-          <h3>Laravel Untuk Pemula</h3>
-          <p>Laravel untuk PHP</p>
+          <p><strong>Username: {{ Auth::user()->name }}</strong></p>
+          <div class="certificate-grid">
+    @forelse ($certificates as $certificate)
+      @if ($certificate->course)
+        <div class="certificate-card">
+          <div class="certificate-header">
+            <h2>{{ $certificate->course->name }}</h2>
+            <p>ID Course: {{ $certificate->id }}</p>
+            <p>Selesai Pada: {{ \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d F Y') }}</p>
+          </div>
+          <div class="certificate-body">
+            @if ($certificate->certificate_path)
+              <a href="{{ asset($certificate->certificate_path) }}" target="_blank" class="btn-view">Lihat Course</a>
+            @else
+              <span class="no-data">Belum ada course yang selesai</span>
+            @endif
+          </div>
+        </div>
+      @else
+        <div class="no-data">Course tidak tersedia</div>
+      @endif
+    @empty
+      <div class="no-data">Belum Ada yang selesai</div>
+    @endforelse
+  </div>
         </div>
       </div>
       

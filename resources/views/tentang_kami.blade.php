@@ -193,8 +193,8 @@
   </div>
   <nav>
     <a href="{{ route('home') }}">Beranda</a>
-    <a href="{{ route('kontak') }}" class="active">Tentang Kami</a>
-    <a href="{{ route('tentang') }}">Kontak</a>
+    <a href="{{ route('tentang') }}" class="active">Tentang Kami</a>
+    <a href="{{ route('kontak') }}">Kontak</a>
     <a href="{{ route('register') }}" class="btn-daftar">Daftar</a>
     <a href="{{ route('login') }}" class="btn-masuk">
       <img src="{{ asset('asset/button_masuk.png') }}" alt="Masuk">
@@ -247,7 +247,7 @@
       <div>
         <h4>Company</h4>
         <ul>
-          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="{{route('tentang')}}">Tentang Kami</a></li>
           <li><a href="#">Blog</a></li>
           <li><a href="#">Komunitas</a></li>
         </ul>
@@ -255,7 +255,7 @@
       <div>
         <h4>Support</h4>
         <ul>
-          <li><a href="#">Hubungi Kami</a></li>
+          <li><a href="{{route('kontak')}}">Hubungi Kami</a></li>
           <li><a href="#">Syarat dan Ketentuan</a></li>
           <li><a href="#">Kebijakan Privasi</a></li>
         </ul>
